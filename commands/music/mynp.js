@@ -15,7 +15,7 @@ module.exports = class GetYtCommand extends commando.Command {
                     key: 'user',
                     prompt: 'Optional user to get now playing Spotify song.',
                     type: 'user',
-                    default: null
+                    default: ''
                 },
             ],
         });
@@ -25,7 +25,7 @@ module.exports = class GetYtCommand extends commando.Command {
         await message.delete();
 
         let presence = {};
-        if (user == null)
+        if (!user)
         {
             presence = message.author.presence;
         }
