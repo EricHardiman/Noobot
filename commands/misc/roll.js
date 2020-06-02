@@ -6,7 +6,7 @@ module.exports = class RollCommand extends commando.Command {
       name: "roll",
       group: "misc",
       memberName: "roll",
-      description: "Rolls 2-15 dice.",
+      description: "Rolls 1-100 dice, defaults to 2.",
     });
   }
 
