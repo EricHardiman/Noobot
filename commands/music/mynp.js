@@ -40,9 +40,15 @@ module.exports = class GetYtCommand extends commando.Command {
     }
 
     const result = await helper.lavalinkHelper(game.details + " " + game.state);
-
+    
+    if (!result) {
+      const response = await message.reply(`There was an issue finding any results for: \`\`\`${game.details + " " + game.state}\`\`\`This is likely an issue with Lavalink. Try again in a few moments.`)
+      await response.delete(5000)
+      return
+    }
+    
     if (result.info) {
-      await message.channel.sendMessage(result.info.uri);
+      await message.channel.send(result.info.uri);
     }
   }
 };
