@@ -46,7 +46,7 @@ module.exports = class MyNPCommand extends commando.Command {
           return;
         }
     
-        const result = await helper.lavalinkHelper(game.details + "ost");
+        const result = await helper.lavalinkHelper(game.details + " " + game.state);
         
         if (!result) {
           const response = await message.reply(`There was an issue finding any results for: \`\`\`${game.details + " " + game.state}\`\`\`This is likely an issue with Lavalink. Try again in a few moments.`)
