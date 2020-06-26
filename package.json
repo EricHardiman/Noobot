@@ -16,6 +16,7 @@
     "discord.js-lavalink": "^2.2.3",
     "dotenv": "^8.1.0",
     "ffmpeg": "0.0.4",
+    "howlongtobeat": "^1.2.1",
     "m3u8stream": "^0.6.3",
     "minimist": "^1.2.5",
     "node-fetch": "^2.6.0",
