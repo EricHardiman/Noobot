@@ -30,23 +30,22 @@ module.exports = class HowLongToBeatCommand extends commando.Command {
       "title": result.name,
       "color": 53380,
       "thumbnail": {
-        url: "https://howlongtobeat.com/games/57507_Control.jpg"
+        url: result.imageUrl
       },
-      "image": "https://howlongtobeat.com/games/57507_Control.jpg",
       "fields": [
         {
           name: main[1],
-          value: result.gameplayMain.toString(),
+          value: `${result.gameplayMain.toString()} hours`,
           inline: true
         },
         {
           name: extra[1],
-          value: result.gameplayMainExtra.toString(),
+          value: `${result.gameplayMainExtra.toString()} hours`,
           inline: true
         },
         {
           name: completionist[1],
-          value: result.gameplayCompletionist.toString(),
+          value: `${result.gameplayCompletionist.toString()} hours`,
           inline: true
         }
       ]
