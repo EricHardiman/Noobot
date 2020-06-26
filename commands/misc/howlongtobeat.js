@@ -25,6 +25,11 @@ module.exports = class HowLongToBeatCommand extends commando.Command {
 
     const [result] = await hltbService.search(game)
 
+    if (!result) {
+      await message.reply(`Unable to find game`)
+      return
+    }
+
     const [main, extra, completionist] = result.timeLabels
     let embedData = {
       "title": result.name,
