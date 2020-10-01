@@ -27,6 +27,7 @@
     "sequelize": "^5.16.0",
     "sequelize-cli": "^5.5.0",
     "sqlite": "^3.0.3",
+    "sqlite3": "^5.0.0",
     "xregexp": "^4.2.4"
   },
   "devDependencies": {
