@@ -44,7 +44,7 @@ module.exports = class HowLongToBeatCommand extends commando.Command {
     console.log(labels);
     for (const [key, phrase] of labels) {
       if (result[key] > 0) {
-        embed.addField(phrase, `${result[key]} hours`);
+        embed.addField(phrase, `${result[key]} hours`, true);
       }
     }
     await message.channel.send(embed);
