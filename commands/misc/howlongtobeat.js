@@ -41,7 +41,7 @@ module.exports = class HowLongToBeatCommand extends commando.Command {
     };
 
     const embed = new Discord.RichEmbed(embedData);
-    console.log(labels);
+
     for (const [key, phrase] of labels) {
       if (result[key] > 0) {
         embed.addField(phrase, `${result[key]} hours`, true);
