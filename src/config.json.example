@@ -1,0 +1,5 @@
+{
+  "token": "DISCORD_BOT_TOKEN",
+  "prefix": "#",
+  "anyDealToken": "IS_THERE_ANY_DEAL_TOKEN"
+}
