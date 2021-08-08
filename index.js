@@ -13,9 +13,9 @@ const startNoobot = () => {
       if (err) return pm2.disconnect();
     });
 
-    pm2.start(Noobot, (err) => {
-      if (err) return pm2.disconnect();
-    });
+    // pm2.start(Noobot, (err) => {
+    //   if (err) return pm2.disconnect();
+    // });
   });
 };
 
