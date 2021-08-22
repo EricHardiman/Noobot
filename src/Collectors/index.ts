@@ -1,3 +1,5 @@
-import AnyDealCollector from './anydeal';
+import AnyDealCollector from './AnyDeal';
+import SongSearch from './SongSearch';
+import Pagination from './Pagination';
 
-export { AnyDealCollector };
+export { AnyDealCollector, SongSearch, Pagination };

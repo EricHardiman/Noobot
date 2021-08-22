@@ -20,6 +20,9 @@ export const command: Command = {
       .then((messages) => {
         if (message.channel.type === 'GUILD_TEXT')
           message.channel.bulkDelete(messages, true);
+      })
+      .catch(() => {
+        return;
       });
   },
 };

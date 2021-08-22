@@ -1,8 +1,14 @@
-import { EmbedField, MessageActionRow, MessageButton } from 'discord.js';
+import {
+  EmbedField,
+  MessageActionRow,
+  MessageButton,
+  MessageEmbed,
+} from 'discord.js';
 import { GetGameTitle } from '../../Helpers/Fetch';
 import { Command } from '../../Interfaces';
-import { ListOptions } from '../../Helpers/Message';
 import { AnyDealCollector } from '../../Collectors';
+import { AnyDealGame } from '../../global';
+import { MessageHelpers } from '../../Helpers';
 
 export const command: Command = {
   name: 'anydeal',
@@ -12,16 +18,16 @@ export const command: Command = {
     if (!args) return;
 
     const gameTitle = args.join(' ');
-    const returnedGames = await GetGameTitle(gameTitle);
+    const returnedGames: AnyDealGame[] = await GetGameTitle(gameTitle);
 
     if (!returnedGames.length)
       return await message.channel
         .send(`No results for ${gameTitle}.`)
         .then((noResult) =>
-          setTimeout(() => {
-            message.delete();
-            noResult.delete();
-          }, 5000),
+          MessageHelpers.DeleteMessage({
+            messages: [message, noResult],
+            timeout: 5000,
+          }),
         );
 
     const fields: EmbedField[] = returnedGames.map(
@@ -41,7 +47,7 @@ export const command: Command = {
           .setLabel(`Game ${parseInt(index) + 1}`),
       );
     }
-    const gameList = ListOptions({
+    const gameList = new MessageEmbed({
       fields,
       color: 'DARK_ORANGE',
     });
