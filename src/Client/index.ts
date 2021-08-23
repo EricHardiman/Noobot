@@ -3,17 +3,25 @@ import { readdirSync } from 'fs';
 import { Client, Intents, Collection } from 'discord.js';
 import { token } from '../config.json';
 import { Command, Config, Event } from '../Interfaces';
+import { Player } from 'discord-player';
 import config from '../config.json';
 
 export default class DiscordClient extends Client {
   constructor() {
-    super({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+    super({
+      intents: [
+        Intents.FLAGS.GUILDS,
+        Intents.FLAGS.GUILD_MESSAGES,
+        Intents.FLAGS.GUILD_VOICE_STATES,
+      ],
+    });
   }
 
   public commands: Collection<string, Command> = new Collection();
   public aliases: Collection<string, Command> = new Collection();
   public events: Collection<string, Event> = new Collection();
   public config: Config = config;
+  public player: Player = new Player(this);
 
   public init() {
     this.login(token);
@@ -21,7 +29,7 @@ export default class DiscordClient extends Client {
     const commandPath = path.join(__dirname, '..', 'Commands');
     readdirSync(commandPath).forEach((dir) => {
       const commands = readdirSync(`${commandPath}/${dir}`).filter((file) =>
-        file.endsWith('ts'),
+        ['js', 'ts'].some((extension) => file.endsWith(extension)),
       );
 
       for (const file of commands) {
