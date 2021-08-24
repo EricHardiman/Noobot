@@ -1,21 +1,21 @@
 import { Message } from 'discord.js';
 
-const DeleteMessage = ({
+const DeleteMessage = async ({
   message,
   messages,
   timeout,
-}: DeleteMessageProps): void => {
+}: DeleteMessageProps): Promise<void> => {
   // If only a single message is passed
   if (message) {
     try {
       // Timeout number is passed
       if (typeof timeout === 'number') {
-        setTimeout(() => {
-          message.delete();
+        setTimeout(async () => {
+          await message.delete();
         }, timeout);
         // Timeout number is not passed
       } else {
-        message.delete();
+        await message.delete();
       }
     } catch {}
   }
@@ -25,15 +25,15 @@ const DeleteMessage = ({
     try {
       // Timeout number is passed
       if (typeof timeout === 'number') {
-        setTimeout(() => {
+        setTimeout(async () => {
           for (const message of messages) {
-            message.delete();
+            await message.delete();
           }
         }, timeout);
         // Timeout number is not passed
       } else {
         for (const message of messages) {
-          message.delete();
+          await message.delete();
         }
       }
     } catch {}

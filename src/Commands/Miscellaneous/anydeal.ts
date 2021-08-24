@@ -21,14 +21,13 @@ export const command: Command = {
     const returnedGames: AnyDealGame[] = await GetGameTitle(gameTitle);
 
     if (!returnedGames.length)
-      return await message.channel
-        .send(`No results for ${gameTitle}.`)
-        .then((noResult) =>
-          MessageHelpers.DeleteMessage({
+      return await message.channel.send(`No results for ${gameTitle}.`).then(
+        async (noResult) =>
+          await MessageHelpers.DeleteMessage({
             messages: [message, noResult],
             timeout: 5000,
           }),
-        );
+      );
 
     const fields: EmbedField[] = returnedGames.map(
       ({ title, price_new, shop: { name }, urls: { buy } }, index) => ({

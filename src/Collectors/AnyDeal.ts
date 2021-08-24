@@ -37,7 +37,9 @@ const AnyDealCollector = ({
   });
 
   collector.on('end', async () => {
-    MessageHelpers.DeleteMessage({ messages: [originalMessage, sentMessage] });
+    await MessageHelpers.DeleteMessage({
+      messages: [originalMessage, sentMessage],
+    });
   });
 };
 

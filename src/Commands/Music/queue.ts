@@ -11,8 +11,9 @@ export const command: Command = {
     if (!queue || (queue && !queue.tracks.length))
       return message.channel
         .send('Nothing in queue.')
-        .then((message) =>
-          MessageHelpers.DeleteMessage({ message, timeout: 5000 }),
+        .then(
+          async (message) =>
+            await MessageHelpers.DeleteMessage({ message, timeout: 5000 }),
         );
     const options = queue.tracks.map(MessageHelpers.TrackSelectionEmbed);
 
