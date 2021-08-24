@@ -13,7 +13,7 @@ export const command: Command = {
 
     if (!songSearch) return;
 
-    // If RegEx expression detects Spotify URL was sent, PlaySpotify handles the rest
+    // If RegEx expression matches that a Spotify URL was sent, PlaySpotify handles the rest
     const spotifyMatch = songSearch.match(/(?<=open.spotify.com\/)(.*)(?=\?)/g);
     if (spotifyMatch) return PlaySpotify({ spotifyMatch, player, message });
 
