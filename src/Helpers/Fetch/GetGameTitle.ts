@@ -1,10 +1,10 @@
-import { anyDealToken } from '../../config.json';
+import { ANY_DEAL_TOKEN } from '../../config.json';
 import { AnyDealGame } from '../../global';
 import axios from 'axios';
 
 const GetGameTitle = async (gameTitle: string): Promise<AnyDealGame[]> => {
   const DLCFilter = ['DLC', 'Bundle', 'Pack'];
-  const url = `https://api.isthereanydeal.com/v01/search/search/?key=${anyDealToken}&q=${gameTitle}`;
+  const url = `https://api.isthereanydeal.com/v01/search/search/?key=${ANY_DEAL_TOKEN}&q=${gameTitle}`;
 
   const searchingForDLC = DLCFilter.some((word) =>
     gameTitle.toLowerCase().includes(word.toLowerCase()),

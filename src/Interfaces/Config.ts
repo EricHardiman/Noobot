@@ -1,5 +1,7 @@
 export interface Config {
-  token: string;
-  prefix: string;
-  anyDealToken: string;
+  TOKEN: string;
+  PREFIX: string;
+  ANY_DEAL_TOKEN: string;
+  SPOTIFY_ID: string;
+  SPOTIFY_SECRET: string;
 }

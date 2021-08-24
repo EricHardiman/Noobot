@@ -2,27 +2,51 @@ import { Message } from 'discord.js';
 import { Track, Player } from 'discord-player';
 import { MessageHelpers, PlayerHelpers } from '..';
 
-const PlayHelper = async ({ message, player, song }: PlayProps) => {
-  player.removeAllListeners('trackStart');
+const PlayHelper = async ({ message, player, song, songs }: PlayProps) => {
+  player.removeAllListeners();
   const queue = PlayerHelpers.RetrieveQueue({
     guild: message.member?.guild!,
     player,
   });
-  const isConnected = queue && queue.connection;
 
-  player.once('trackStart', (_, track) => {
+  player.once('trackStart', async (_, track) => {
     const embed = MessageHelpers.NowPlayingEmbed(track);
 
-    return message.channel
-      .send({ embeds: [embed] })
+    return await message.channel
+      .send({ embeds: [embed], isInteraction: false })
       .then((message) =>
         MessageHelpers.DeleteMessage({ message, timeout: 5000 }),
       );
   });
 
-  queue.addTrack(song);
+  player.once('tracksAdd', async (_, tracks) => {
+    return await message.channel
+      .send({
+        content: `Added ${tracks.length} to the Queue!`,
+        isInteraction: false,
+      })
+      .then((message) =>
+        MessageHelpers.DeleteMessage({ message, timeout: 5000 }),
+      );
+  });
 
-  if (!isConnected) {
+  player.once('trackAdd', async (_, track) => {
+    return await message.channel
+      .send({
+        content: `Added ${track.title} to the Queue!`,
+        isInteraction: false,
+      })
+      .then((message) =>
+        MessageHelpers.DeleteMessage({ message, timeout: 5000 }),
+      );
+  });
+
+  if (song) queue.addTrack(song);
+  if (songs?.length) queue.addTracks(songs);
+
+  const playerIsConnected = queue && queue.connection;
+
+  if (!playerIsConnected) {
     await PlayerHelpers.JoinServer({ message, queue });
     try {
       queue.setVolume(80);
@@ -37,18 +61,13 @@ const PlayHelper = async ({ message, player, song }: PlayProps) => {
           MessageHelpers.DeleteMessage({ message, timeout: 3000 }),
         );
     }
-  } else {
-    await message.channel
-      .send({ content: `Added ${song.title} to Queue!`, isInteraction: false })
-      .then((message) =>
-        MessageHelpers.DeleteMessage({ message, timeout: 3000 }),
-      );
   }
 };
 
 interface PlayProps {
   message: Message;
-  song: Track;
+  song?: Track;
+  songs?: Track[];
   player: Player;
 }
 
