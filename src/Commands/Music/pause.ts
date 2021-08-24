@@ -1,5 +1,5 @@
 import { Command } from '../../Interfaces';
-import { prefix } from '../../config.json';
+import { PREFIX } from '../../config.json';
 
 export const command: Command = {
   name: 'pause',
@@ -10,7 +10,7 @@ export const command: Command = {
     if (queue && !queue.connection.paused) {
       queue.setPaused(true);
       return await message.channel.send(
-        `Successfully paused - use \`${prefix}resume\` to resume.`,
+        `Successfully paused - use \`${PREFIX}resume\` to resume.`,
       );
     }
   },

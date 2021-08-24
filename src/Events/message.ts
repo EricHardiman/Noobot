@@ -7,12 +7,12 @@ export const event: Event = {
     if (
       message.author.bot ||
       !message.guild ||
-      !message.content.startsWith(client.config.prefix)
+      !message.content.startsWith(client.config.PREFIX)
     )
       return;
 
     const args = message.content
-      .slice(client.config.prefix.length)
+      .slice(client.config.PREFIX.length)
       .trim()
       .split(/ +/g);
 

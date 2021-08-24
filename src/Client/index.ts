@@ -1,7 +1,7 @@
 import path from 'path';
 import { readdirSync } from 'fs';
 import { Client, Intents, Collection } from 'discord.js';
-import { token } from '../config.json';
+import { TOKEN } from '../config.json';
 import { Command, Config, Event } from '../Interfaces';
 import { Player } from 'discord-player';
 import config from '../config.json';
@@ -24,7 +24,7 @@ export default class DiscordClient extends Client {
   public player: Player = new Player(this);
 
   public init() {
-    this.login(token);
+    this.login(TOKEN);
 
     const commandPath = path.join(__dirname, '..', 'Commands');
     readdirSync(commandPath).forEach((dir) => {

@@ -5,5 +5,6 @@ export const event: Event = {
   name: 'ready',
   run: async (client: DiscordClient) => {
     console.log(`${client.user?.tag} is online!`);
+    client.user?.setActivity({ name: 'Still being made.' });
   },
 };

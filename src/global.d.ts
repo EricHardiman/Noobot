@@ -14,3 +14,31 @@ export interface AnyDealGame {
     game: string;
   };
 }
+
+export interface SpotifyTrack {
+  album: {
+    album_type: string;
+    name: string;
+    release_date: string;
+  };
+  artists: Array<{
+    name: string;
+  }>;
+  name: string;
+}
+
+export interface SpotifyAlbum {
+  artists: Array<{
+    name: string;
+  }>;
+  tracks: {
+    items: SpotifyTrack[];
+  };
+  name: string;
+}
+
+export interface SpotifyPlaylist {
+  tracks: {
+    items: Array<{ track: SpotifyTrack }>;
+  };
+}
