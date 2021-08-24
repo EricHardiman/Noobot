@@ -31,11 +31,11 @@ const SongSearchCollector = ({
 
   collector.on('end', async (collection, reason) => {
     if (reason === 'stop') {
-      return MessageHelpers.DeleteMessage({ message: sentMessage });
+      return await MessageHelpers.DeleteMessage({ message: sentMessage });
     }
 
     if (![...collection.values()].length)
-      return MessageHelpers.DeleteMessage({
+      return await MessageHelpers.DeleteMessage({
         messages: [originalMessage, sentMessage],
       });
   });

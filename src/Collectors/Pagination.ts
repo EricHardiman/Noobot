@@ -20,7 +20,7 @@ const PaginationCollector = ({
     const [direction, arrStart, arrEnd, currentPage] = i.customId.split('-');
 
     if (direction === 'delete') {
-      MessageHelpers.DeleteMessage({ message: originalMessage });
+      await MessageHelpers.DeleteMessage({ message: originalMessage });
       return collector.stop('delete');
     }
 
@@ -54,9 +54,9 @@ const PaginationCollector = ({
     return await i.update({ embeds: [embeds], components: [components] });
   });
 
-  collector.on('end', (_, reason) => {
+  collector.on('end', async (_, reason) => {
     if (reason === 'time') {
-      MessageHelpers.DeleteMessage({
+      await MessageHelpers.DeleteMessage({
         messages: [originalMessage, sentMessage],
       });
     }

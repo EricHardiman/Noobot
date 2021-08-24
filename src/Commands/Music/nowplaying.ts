@@ -14,8 +14,9 @@ export const command: Command = {
 
       return await message.channel
         .send({ embeds: [embed] })
-        .then((message) =>
-          MessageHelpers.DeleteMessage({ message, timeout: 10000 }),
+        .then(
+          async (message) =>
+            await MessageHelpers.DeleteMessage({ message, timeout: 10000 }),
         );
     }
   },

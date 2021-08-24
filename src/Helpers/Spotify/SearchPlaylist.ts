@@ -16,8 +16,9 @@ const SearchPlaylist = async ({
     .catch(() => {
       message.channel
         .send('No results found from given Spotify link.')
-        .then((message) =>
-          MessageHelpers.DeleteMessage({ message, timeout: 3000 }),
+        .then(
+          async (message) =>
+            await MessageHelpers.DeleteMessage({ message, timeout: 3000 }),
         );
     });
 

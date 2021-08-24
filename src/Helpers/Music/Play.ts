@@ -14,8 +14,9 @@ const PlayHelper = async ({ message, player, song, songs }: PlayProps) => {
 
     return await message.channel
       .send({ embeds: [embed], isInteraction: false })
-      .then((message) =>
-        MessageHelpers.DeleteMessage({ message, timeout: 5000 }),
+      .then(
+        async (message) =>
+          await MessageHelpers.DeleteMessage({ message, timeout: 5000 }),
       );
   });
 
@@ -25,8 +26,9 @@ const PlayHelper = async ({ message, player, song, songs }: PlayProps) => {
         content: `Added ${tracks.length} to the Queue!`,
         isInteraction: false,
       })
-      .then((message) =>
-        MessageHelpers.DeleteMessage({ message, timeout: 5000 }),
+      .then(
+        async (message) =>
+          await MessageHelpers.DeleteMessage({ message, timeout: 5000 }),
       );
   });
 
@@ -36,8 +38,9 @@ const PlayHelper = async ({ message, player, song, songs }: PlayProps) => {
         content: `Added ${track.title} to the Queue!`,
         isInteraction: false,
       })
-      .then((message) =>
-        MessageHelpers.DeleteMessage({ message, timeout: 5000 }),
+      .then(
+        async (message) =>
+          await MessageHelpers.DeleteMessage({ message, timeout: 5000 }),
       );
   });
 
@@ -57,8 +60,9 @@ const PlayHelper = async ({ message, player, song, songs }: PlayProps) => {
           content: 'Could not join your voice channel!',
           isInteraction: false,
         })
-        .then((message) =>
-          MessageHelpers.DeleteMessage({ message, timeout: 3000 }),
+        .then(
+          async (message) =>
+            await MessageHelpers.DeleteMessage({ message, timeout: 3000 }),
         );
     }
   }

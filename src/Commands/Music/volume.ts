@@ -12,7 +12,9 @@ export const command: Command = {
     if (!args.length && isPlaying) {
       return await message.channel
         .send(`Current volume level is ${queue.volume}%`)
-        .then((message) => MessageHelpers.DeleteMessage({ message }));
+        .then(
+          async (message) => await MessageHelpers.DeleteMessage({ message }),
+        );
     }
 
     const volume = parseInt(args.join(''));
@@ -23,8 +25,9 @@ export const command: Command = {
       queue.setVolume(volume);
       return await message.channel
         .send(`Set volume level to ${volume}%.`)
-        .then((message) =>
-          MessageHelpers.DeleteMessage({ message, timeout: 3000 }),
+        .then(
+          async (message) =>
+            await MessageHelpers.DeleteMessage({ message, timeout: 3000 }),
         );
     }
   },
