@@ -1,10 +1,9 @@
 import path from 'path';
 import { readdirSync } from 'fs';
 import { Client, Intents, Collection } from 'discord.js';
-import { TOKEN } from '../config.json';
+import config, { TOKEN } from '../config.json';
 import { Command, Config, Event } from '../Interfaces';
 import { Player } from 'discord-player';
-import config from '../config.json';
 
 export default class DiscordClient extends Client {
   constructor() {

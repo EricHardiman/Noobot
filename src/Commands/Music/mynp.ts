@@ -1,7 +1,6 @@
 import { MONGOOSE_URL } from '../../config.json';
 import { MessageEmbed } from 'discord.js';
-import { DatabaseHelpers, MessageHelpers } from '../../Helpers';
-import SongFromPresence from '../../Helpers/Spotify/SongFromPresence';
+import { DatabaseHelpers, MessageHelpers, SpotifyHelpers } from '../../Helpers';
 import { Command } from '../../Interfaces';
 
 export const command: Command = {
@@ -10,9 +9,15 @@ export const command: Command = {
   run: async (client, message, args) => {
     const { player } = client;
     await MessageHelpers.DeleteMessage({ message });
-    DatabaseHelpers.RetrieveSpotifyLink(message.author.id);
+    const spotifyLink = await DatabaseHelpers.RetrieveSpotifyLink(
+      message.author.id,
+    );
 
-    const songAndUser = await SongFromPresence({
+    if (spotifyLink) {
+      await SpotifyHelpers.GetSpotifyUser(spotifyLink);
+    }
+
+    const songAndUser = await SpotifyHelpers.SongFromPresence({
       args,
       message,
       player,
