@@ -1,7 +1,0 @@
-{
-  "TOKEN": "Discord bot token",
-  "PREFIX": "Prefix for commands",
-  "ANY_DEAL_TOKEN": "IsThereAnyDeal.com token",
-  "SPOTIFY_ID": "Spotify API ID",
-  "SPOTIFY_SECRET": "Spotify API Secret"
-}

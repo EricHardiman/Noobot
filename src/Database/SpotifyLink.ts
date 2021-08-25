@@ -1,6 +1,6 @@
 import { model, Schema, Model, Document } from 'mongoose';
 
-interface ISpotifyLink extends Document {
+export interface ISpotifyLink extends Document {
   discordId: String;
   access_token: String;
   refresh_token: String;
