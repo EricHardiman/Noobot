@@ -1,28 +1,28 @@
-import { MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
-import mongoose from "mongoose";
-import LinkSpotifyCollector from "../../Collectors/LinkSpotify";
-import SpotifyLink from "../../Database/SpotifyLink";
-import { MessageHelpers } from "../../Helpers";
-import { Command } from "../../Interfaces";
+import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
+import mongoose from 'mongoose';
+import LinkSpotifyCollector from '../../Collectors/LinkSpotify';
+import SpotifyLink from '../../Database/SpotifyLink';
+import { MessageHelpers } from '../../Helpers';
+import { Command } from '../../Interfaces';
 
 const handleActionRow = (buttonsDisabled: boolean): MessageActionRow =>
   new MessageActionRow().addComponents(
     new MessageButton()
-      .setLabel("Cancel")
-      .setStyle("DANGER")
-      .setCustomId("cancel")
+      .setLabel('Cancel')
+      .setStyle('DANGER')
+      .setCustomId('cancel')
       .setDisabled(buttonsDisabled),
     new MessageButton()
-      .setLabel("Finished")
-      .setStyle("SUCCESS")
-      .setCustomId("finished")
-      .setDisabled(buttonsDisabled)
+      .setLabel('Finished')
+      .setStyle('SUCCESS')
+      .setCustomId('finished')
+      .setDisabled(buttonsDisabled),
   );
 
-const url = "mongodb://localhost:27017/Noobot";
+const url = 'mongodb://localhost:27017/Noobot';
 
 export const command: Command = {
-  name: "linkspotify",
+  name: 'linkspotify',
   description:
     "Sends a DM with a link to Verify Spotify. This allows the mynp command to work even if you're playing a game.",
   run: async (_client, message) => {
@@ -35,8 +35,8 @@ export const command: Command = {
     const newLink = new SpotifyLink({
       discordId,
       state: secret,
-      access_token: "",
-      refresh_token: "",
+      access_token: '',
+      refresh_token: '',
     });
 
     const { state, access_token, refresh_token } = newLink;
@@ -47,7 +47,7 @@ export const command: Command = {
       if (prev) {
         await SpotifyLink.updateOne(
           { discordId },
-          { state, access_token, refresh_token }
+          { state, access_token, refresh_token },
         );
 
         return prev;
@@ -56,14 +56,16 @@ export const command: Command = {
       return await SpotifyLink.create(newLink);
     });
 
+    await mongoose.connection.close();
+
     const embed = new MessageEmbed()
-      .setAuthor("Link Spotify to Noobot")
-      .setTitle("Click Here")
+      .setAuthor('Link Spotify to Noobot')
+      .setTitle('Click Here')
       .setURL(`https://noobot.tacoreel.app/login?state=${secret}-${discordId}`)
       .setDescription(
-        "After you click the URL above, come back to this message and click Finished"
+        'After you click the URL above, come back to this message and click Finished',
       )
-      .setFooter("This will be deleted after 30 seconds.");
+      .setFooter('This will be deleted after 30 seconds.');
 
     const disabledButtonsMessage = await message.author.send({
       embeds: [embed],
@@ -80,7 +82,7 @@ export const command: Command = {
             sentMessage,
             originalMessage: message,
             secret,
-          })
+          }),
         );
     }, 5000);
   },
