@@ -1,7 +1,7 @@
-import { Player, Track } from 'discord-player';
-import { GuildMember, Message } from 'discord.js';
-import { GetCurrentPlayingTrack } from '.';
-import { DatabaseHelpers } from '..';
+import { Player, Track } from "discord-player";
+import { GuildMember, Message } from "discord.js";
+import { GetCurrentPlayingTrack } from ".";
+import { DatabaseHelpers } from "..";
 
 const SongFromPresence = async ({
   args,
@@ -9,12 +9,12 @@ const SongFromPresence = async ({
   message,
 }: PresenceProps): Promise<{ song: Track; foundUser: GuildMember } | void> => {
   const taggedUser = args
-    .join('')
+    .join("")
     .match(/(?<=<@!)(.*)(?=\>)/g)
-    ?.join('');
+    ?.join("");
 
   const foundUser = message.guild?.members.cache.get(
-    taggedUser ?? message.author.id,
+    taggedUser ?? message.author.id
   )!;
 
   const spotifyLink = await DatabaseHelpers.RetrieveSpotifyLink(foundUser.id);
@@ -33,7 +33,7 @@ const SongFromPresence = async ({
     const { presence } = foundUser;
 
     const userPresence = presence?.activities.find(
-      (activity) => activity.name === 'Spotify',
+      (activity) => activity.name === "Spotify"
     )!;
 
     if (!userPresence) return;

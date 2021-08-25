@@ -1,11 +1,10 @@
-import { MONGOOSE_URL } from '../../config.json';
-import { MessageEmbed } from 'discord.js';
-import { DatabaseHelpers, MessageHelpers, SpotifyHelpers } from '../../Helpers';
-import { Command } from '../../Interfaces';
+import { MessageEmbed } from "discord.js";
+import { MessageHelpers, SpotifyHelpers } from "../../Helpers";
+import { Command } from "../../Interfaces";
 
 export const command: Command = {
-  name: 'mynp',
-  description: 'Posts which song currently playing on Spotify.',
+  name: "mynp",
+  description: "Posts which song currently playing on Spotify.",
   run: async (client, message, args) => {
     const { player } = client;
     await MessageHelpers.DeleteMessage({ message });
