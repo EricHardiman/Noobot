@@ -1,5 +1,6 @@
 import { MessageEmbed } from 'discord.js';
-import { MessageHelpers, MusicHelpers } from '../../Helpers';
+import { MessageHelpers } from '../../Helpers';
+import SongFromPresence from '../../Helpers/Spotify/SongFromPresence';
 import { Command } from '../../Interfaces';
 
 export const command: Command = {
@@ -8,36 +9,27 @@ export const command: Command = {
   run: async (client, message, args) => {
     const { player } = client;
     await MessageHelpers.DeleteMessage({ message });
-    const taggedUser = args
-      .join('')
-      .match(/(?<=<@!)(.*)(?=\>)/g)
-      ?.join('');
 
-    const foundUser = message.guild?.members.cache.get(
-      taggedUser ?? message.author.id,
-    )!;
+    const songAndUser = await SongFromPresence({
+      args,
+      message,
+      player,
+    });
 
-    const { presence, displayName, displayColor } = foundUser;
+    if (songAndUser) {
+      const {
+        foundUser: { displayColor, displayName },
+        song,
+      } = songAndUser;
 
-    const userPresence = presence?.activities.find(
-      (activity) => activity.name === 'Spotify',
-    )!;
+      const embed = new MessageEmbed()
+        .setAuthor(`${displayName}'s Spotify is Currently Playing`)
+        .setColor(displayColor)
+        .setTitle(song.title)
+        .setURL(song.url)
+        .setThumbnail(song.thumbnail);
 
-    if (!userPresence) return;
-
-    const [song] = (
-      await player.search(`${userPresence.details} ${userPresence.state}`, {
-        requestedBy: message.author,
-      })
-    ).tracks;
-
-    const embed = new MessageEmbed()
-      .setAuthor(`${displayName}'s Spotify is Currently Playing`)
-      .setColor(displayColor)
-      .setTitle(song.title)
-      .setURL(song.url)
-      .setThumbnail(song.thumbnail);
-
-    return await message.channel.send({ embeds: [embed] });
+      return await message.channel.send({ embeds: [embed] });
+    }
   },
 };
