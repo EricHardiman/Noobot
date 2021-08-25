@@ -8,7 +8,6 @@ const SongFromPresence = async ({
   player,
   message,
 }: PresenceProps): Promise<{ song: Track; foundUser: GuildMember } | void> => {
-  let spotifyReturn = '';
   const taggedUser = args
     .join('')
     .match(/(?<=<@!)(.*)(?=\>)/g)
@@ -21,29 +20,32 @@ const SongFromPresence = async ({
   const spotifyLink = await DatabaseHelpers.RetrieveSpotifyLink(foundUser.id);
 
   if (spotifyLink) {
-    spotifyReturn = await GetCurrentPlayingTrack(spotifyLink);
-  }
+    const spotifyReturn = await GetCurrentPlayingTrack(spotifyLink);
 
-  const { presence } = foundUser;
-
-  const userPresence = presence?.activities.find(
-    (activity) => activity.name === 'Spotify',
-  )!;
-
-  if (!userPresence) return;
-
-  const [song] = (
-    await player.search(
-      !spotifyLink
-        ? `${userPresence.details} ${userPresence.state}`
-        : spotifyReturn,
-      {
+    const [song] = (
+      await player.search(spotifyReturn, {
         requestedBy: message.author,
-      },
-    )
-  ).tracks;
+      })
+    ).tracks;
 
-  return { song, foundUser };
+    return { song, foundUser };
+  } else {
+    const { presence } = foundUser;
+
+    const userPresence = presence?.activities.find(
+      (activity) => activity.name === 'Spotify',
+    )!;
+
+    if (!userPresence) return;
+
+    const [song] = (
+      await player.search(`${userPresence.details} ${userPresence.state}`, {
+        requestedBy: message.author,
+      })
+    ).tracks;
+
+    return { song, foundUser };
+  }
 };
 
 interface PresenceProps {
