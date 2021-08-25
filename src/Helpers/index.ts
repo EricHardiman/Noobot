@@ -3,6 +3,7 @@ import * as MathHelpers from './Math';
 import * as MessageHelpers from './Message';
 import * as MusicHelpers from './Music';
 import * as PlayerHelpers from './Player';
+import * as DatabaseHelpers from './Database';
 
 export {
   FetchHelpers,
@@ -10,4 +11,5 @@ export {
   MessageHelpers,
   MusicHelpers,
   PlayerHelpers,
+  DatabaseHelpers,
 };

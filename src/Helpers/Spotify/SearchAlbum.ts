@@ -1,7 +1,7 @@
 import Spotify from 'node-spotify-api';
 import { MessageHelpers } from '..';
 import { SPOTIFY_ID, SPOTIFY_SECRET } from '../../config.json';
-import { SpotifyTrack, SpotifyAlbum } from '../../global';
+import { SpotifyAlbum } from '../../global';
 import { SpotifyHelperProps } from './SpotifyMatch';
 
 const SearchAlbum = async ({
