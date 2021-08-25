@@ -26,10 +26,8 @@ const RetrieveSpotifyLink = async (discordId: string) => {
       { discordId },
       { access_token: data.access_token },
     );
-    console.log(spotifyLink.access_token, data.access_token);
     spotifyLink.access_token = data.access_token;
   }
-  console.log(spotifyLink);
 
   return spotifyLink;
 };

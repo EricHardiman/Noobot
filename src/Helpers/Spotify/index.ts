@@ -1,4 +1,4 @@
-import GetSpotifyUser from './GetSpotifyUser';
+import GetCurrentPlayingTrack from './GetCurrentPlayingTrack';
 import PlaySpotify from './PlaySpotify';
 import SearchAlbum from './SearchAlbum';
 import SearchPlaylist from './SearchPlaylist';
@@ -7,7 +7,7 @@ import SongFromPresence from './SongFromPresence';
 import SpotifyMatch from './SpotifyMatch';
 
 export {
-  GetSpotifyUser,
+  GetCurrentPlayingTrack,
   PlaySpotify,
   SearchAlbum,
   SearchPlaylist,

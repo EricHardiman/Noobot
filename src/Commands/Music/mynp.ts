@@ -9,13 +9,6 @@ export const command: Command = {
   run: async (client, message, args) => {
     const { player } = client;
     await MessageHelpers.DeleteMessage({ message });
-    const spotifyLink = await DatabaseHelpers.RetrieveSpotifyLink(
-      message.author.id,
-    );
-
-    if (spotifyLink) {
-      await SpotifyHelpers.GetSpotifyUser(spotifyLink);
-    }
 
     const songAndUser = await SpotifyHelpers.SongFromPresence({
       args,
