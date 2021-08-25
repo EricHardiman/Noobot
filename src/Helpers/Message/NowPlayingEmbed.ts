@@ -1,7 +1,10 @@
 import { Track } from 'discord-player';
 import { MessageEmbed } from 'discord.js';
 
-const NowPlayingEmbed = (track: Track): MessageEmbed => {
+const NowPlayingEmbed = (
+  track: Track,
+  additionalFooter?: string,
+): MessageEmbed => {
   const {
     title,
     url,
@@ -16,7 +19,7 @@ const NowPlayingEmbed = (track: Track): MessageEmbed => {
     .setURL(url)
     .setThumbnail(thumbnail)
     .setFooter(
-      `Requested by ${username}`,
+      `${additionalFooter ?? ''} Requested by ${username}`,
       `https://cdn.discordapp.com/avatars/${id}/${avatar}.png`,
     );
 

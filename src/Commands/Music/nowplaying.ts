@@ -1,4 +1,5 @@
-import { MessageHelpers } from '../../Helpers';
+import { Queue } from 'discord-player';
+import { MathHelpers, MessageHelpers } from '../../Helpers';
 import { Command } from '../../Interfaces';
 
 export const command: Command = {
@@ -11,6 +12,7 @@ export const command: Command = {
 
     if (isPlaying) {
       const embed = MessageHelpers.NowPlayingEmbed(queue.current);
+      embed.setDescription(handlePlayingBar(queue));
 
       return await message.channel
         .send({ embeds: [embed] })
@@ -19,5 +21,26 @@ export const command: Command = {
             await MessageHelpers.DeleteMessage({ message, timeout: 10000 }),
         );
     }
+
+    return;
   },
+};
+
+const handlePlayingBar = (queue: Queue): string => {
+  const twentyDashes = '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬';
+  const secondsPassed =
+    queue.connection.audioPlayer.state['playbackDuration'] / 1000;
+  const currentSongDuration = queue.current.durationMS / 1000;
+
+  const playingDotIndex = Math.floor(
+    secondsPassed / currentSongDuration / 0.05,
+  );
+  const playingBar =
+    twentyDashes.slice(0, playingDotIndex) +
+    '🔵' +
+    twentyDashes.slice(playingDotIndex, 19);
+
+  return `${playingBar} ${MathHelpers.ConvertSecondsToString(
+    Math.floor(secondsPassed),
+  )} /${MathHelpers.ConvertSecondsToString(currentSongDuration)}`;
 };

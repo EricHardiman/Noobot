@@ -6,6 +6,9 @@ export const command: Command = {
   run: async (client, message) => {
     const queue = client.player.getQueue(message.guildId!);
 
-    if (queue && queue.playing) queue.skip();
+    if (queue && queue.playing)
+      try {
+        queue.skip();
+      } catch {}
   },
 };
