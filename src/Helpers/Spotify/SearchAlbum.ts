@@ -1,5 +1,5 @@
 import Spotify from 'node-spotify-api';
-import { MessageHelpers } from '..';
+import { DeleteMessage } from '..';
 import { SPOTIFY_ID, SPOTIFY_SECRET } from '../../config.json';
 import { SpotifyAlbum } from '../../global';
 import { SpotifyHelperProps } from './SpotifyMatch';
@@ -17,8 +17,7 @@ const SearchAlbum = async ({
       message.channel
         .send('No results found from given Spotify link.')
         .then(
-          async (message) =>
-            await MessageHelpers.DeleteMessage({ message, timeout: 3000 }),
+          async (message) => await DeleteMessage({ message, timeout: 3000 }),
         );
     });
 

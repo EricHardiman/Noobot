@@ -1,27 +1,21 @@
-import { Track } from 'discord-player';
 import { MessageEmbed } from 'discord.js';
+import { VolcanoTrack } from '../../global';
 
 const NowPlayingEmbed = (
-  track: Track,
+  track: VolcanoTrack,
   additionalFooter?: string,
 ): MessageEmbed => {
   const {
-    title,
-    url,
-    thumbnail,
-    requestedBy: { id, avatar, username },
+    info: { title, uri },
   } = track;
 
   const embed = new MessageEmbed()
     .setAuthor('Now Playing')
     .setColor('BLURPLE')
     .setTitle(title)
-    .setURL(url)
-    .setThumbnail(thumbnail)
-    .setFooter(
-      `${additionalFooter ?? ''} Requested by ${username}`,
-      `https://cdn.discordapp.com/avatars/${id}/${avatar}.png`,
-    );
+    .setURL(uri);
+
+  additionalFooter && embed.setFooter(additionalFooter);
 
   return embed;
 };

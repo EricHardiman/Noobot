@@ -1,5 +1,4 @@
-import { MessageHelpers, PlayerHelpers } from '../../Helpers';
-import SpotifyMatch from '../../Helpers/Spotify/SpotifyMatch';
+import { DeleteMessage, SongSearch, SpotifyMatch } from '../../Helpers';
 import { Command } from '../../Interfaces';
 
 export const command: Command = {
@@ -7,28 +6,26 @@ export const command: Command = {
   description: 'Retrieves YouTube link from Single Spotify Song URL.',
   aliases: ['yt', 'gyt'],
   run: async (client, message, args) => {
-    const { player } = client;
-    const songSearch = args.join('');
+    const { manager } = client;
+    const search = args.join('');
 
-    if (!songSearch) return;
+    if (!search) return;
 
-    const spotifyMatch = songSearch.match(/(?<=open.spotify.com\/)(.*)(?=\?)/g);
+    const spotifyMatch = search.match(/(?<=open.spotify.com\/)(.*)(?=\?)/g);
 
     const [searchType, searchId] = spotifyMatch!.toString().split('/');
-    const spotifyReturn = await SpotifyMatch({
-      message,
-      searchId,
-      searchType,
-    });
+    const spotifyReturn = await SpotifyMatch({ message, searchId, searchType });
 
     if (!Array.isArray(spotifyReturn)) {
-      const [song] = (
-        await player.search(spotifyReturn, { requestedBy: message.author })
-      ).tracks;
+      const {
+        tracks: [song],
+      } = await SongSearch({ manager, search: spotifyReturn });
 
-      return await message.channel.send(song.url).then(() => {
-        MessageHelpers.DeleteMessage({ message, timeout: 1000 });
+      return await message.channel.send(song.info.uri).then(() => {
+        DeleteMessage({ message, timeout: 1000 });
       });
     }
+
+    return message.channel.send('Needs to be a single Spotify Track link.');
   },
 };

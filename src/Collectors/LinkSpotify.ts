@@ -1,10 +1,10 @@
-import axios from "axios";
-import { Message, MessageEmbed } from "discord.js";
-import mongoose from "mongoose";
-import SpotifyLink from "../Database/SpotifyLink";
-import { MessageHelpers, MusicHelpers } from "../Helpers";
+import axios from 'axios';
+import { Message, MessageEmbed } from 'discord.js';
+import mongoose from 'mongoose';
+import SpotifyLink from '../Database/SpotifyLink';
+import { DeleteMessage } from '../Helpers';
 
-const url = "mongodb://localhost:27017/Noobot";
+const url = 'mongodb://localhost:27017/Noobot';
 const LinkSpotifyCollector = ({
   sentMessage,
   originalMessage,
@@ -14,13 +14,13 @@ const LinkSpotifyCollector = ({
     time: 30000,
   });
 
-  collector.on("collect", async (i) => {
+  collector.on('collect', async (i) => {
     const { customId } = i;
 
-    if (customId === "cancel")
-      return await MessageHelpers.DeleteMessage({ message: sentMessage });
+    if (customId === 'cancel')
+      return await DeleteMessage({ message: sentMessage });
 
-    if (customId === "finished") {
+    if (customId === 'finished') {
       await mongoose.connect(url);
 
       await SpotifyLink.findOne({
@@ -31,11 +31,11 @@ const LinkSpotifyCollector = ({
           const { access_token } = found;
           axios
             .request({
-              method: "GET",
-              url: "https://api.spotify.com/v1/me",
+              method: 'GET',
+              url: 'https://api.spotify.com/v1/me',
               headers: {
                 Authorization: `Bearer ${access_token}`,
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
               },
             })
             .then(async ({ data }) => {
@@ -47,31 +47,31 @@ const LinkSpotifyCollector = ({
 
               const embed = new MessageEmbed()
                 .setAuthor(
-                  "Successfully Linked!",
+                  'Successfully Linked!',
                   images.length
                     ? images[0].url
-                    : "https://storage.googleapis.com/pr-newsroom-wp/1/2021/02/Spotify_Icon_RGB_Green.png"
+                    : 'https://storage.googleapis.com/pr-newsroom-wp/1/2021/02/Spotify_Icon_RGB_Green.png',
                 )
                 .setTitle(`${display_name} is now linked with Noobot!`)
                 .setURL(spotify)
-                .setColor("BLURPLE");
+                .setColor('BLURPLE');
 
-              await MessageHelpers.DeleteMessage({ message: sentMessage });
+              await DeleteMessage({ message: sentMessage });
               await originalMessage.author.send({ embeds: [embed] });
             });
         }
       });
 
       await mongoose.connection.close();
-      return await MessageHelpers.DeleteMessage({ message: sentMessage });
+      return await DeleteMessage({ message: sentMessage });
     }
 
     return collector.stop();
   });
 
-  collector.on("end", async (collection) => {
+  collector.on('end', async (collection) => {
     if (![...collection.values()].length)
-      return await MessageHelpers.DeleteMessage({
+      return await DeleteMessage({
         message: sentMessage,
       });
   });

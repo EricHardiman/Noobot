@@ -1,4 +1,5 @@
 import GetGameTitle from './GetGameTitle';
 import GetGamePrice from './GetGamePrice';
+import SongSearch from './SongSearch';
 
-export { GetGameTitle, GetGamePrice };
+export { GetGameTitle, GetGamePrice, SongSearch };

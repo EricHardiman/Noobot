@@ -2,7 +2,7 @@ import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
 import mongoose from 'mongoose';
 import LinkSpotifyCollector from '../../Collectors/LinkSpotify';
 import SpotifyLink from '../../Database/SpotifyLink';
-import { MessageHelpers } from '../../Helpers';
+import { DeleteMessage } from '../../Helpers';
 import { Command } from '../../Interfaces';
 
 const handleActionRow = (buttonsDisabled: boolean): MessageActionRow =>
@@ -26,7 +26,7 @@ export const command: Command = {
   description:
     "Sends a DM with a link to Verify Spotify. This allows the mynp command to work even if you're playing a game.",
   run: async (_client, message) => {
-    await MessageHelpers.DeleteMessage({ message });
+    await DeleteMessage({ message });
     const secret = Math.random().toString(36).substr(2, 8);
     const discordId = message.author.id;
 

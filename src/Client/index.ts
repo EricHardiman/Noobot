@@ -3,7 +3,7 @@ import { readdirSync } from 'fs';
 import { Client, Intents, Collection } from 'discord.js';
 import config, { TOKEN } from '../config.json';
 import { Command, Config, Event } from '../Interfaces';
-import { Player } from 'discord-player';
+import { Manager } from 'lavacord';
 
 export default class DiscordClient extends Client {
   constructor() {
@@ -21,7 +21,7 @@ export default class DiscordClient extends Client {
   public aliases: Collection<string, Command> = new Collection();
   public events: Collection<string, Event> = new Collection();
   public config: Config = config;
-  public player: Player = new Player(this);
+  public manager!: Manager;
 
   public init() {
     this.login(TOKEN);
@@ -51,5 +51,24 @@ export default class DiscordClient extends Client {
       this.events.set(event.name, event);
       this.on(event.name, event.run.bind(null, this));
     });
+  }
+
+  public async initVolcano(client: Client) {
+    const nodes = [
+      { id: '1', host: 'localhost', port: 2333, password: 'helloThere!' },
+    ];
+
+    this.manager = new Manager(nodes, {
+      user: client.user!.id,
+      shards: 1,
+      send: (packet) => {
+        const guild = client.guilds.cache.get(packet.d.guild_id);
+        if (!guild) return;
+
+        return guild.shard.send(packet);
+      },
+    });
+
+    await this.manager.connect();
   }
 }

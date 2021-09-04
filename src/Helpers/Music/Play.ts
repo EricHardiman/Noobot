@@ -1,78 +1,47 @@
+import Mongoose from 'mongoose';
+import { MONGOOSE_URL } from '../../config.json';
 import { Message } from 'discord.js';
-import { Track, Player } from 'discord-player';
-import { MessageHelpers, PlayerHelpers } from '..';
+import { Manager } from 'lavacord';
+import { NowPlaying, RetrievePlayer } from '.';
+import { VolcanoTrack } from '../../global';
+import { FindCreateQueue, JoinVoice, AddTrack, AddTracks, PlayNext } from '..';
 
-const PlayHelper = async ({ message, player, song, songs }: PlayProps) => {
-  player.removeAllListeners();
-  const queue = PlayerHelpers.RetrieveQueue({
-    guild: message.member?.guild!,
-    player,
+const PlayHelper = async ({ message, manager, song, songs }: PlayProps) => {
+  const mongoose = await Mongoose.connect(MONGOOSE_URL);
+  const player =
+    RetrievePlayer(manager, message) ?? (await JoinVoice(manager, message));
+
+  player.removeAllListeners('start');
+  player.removeAllListeners('end');
+
+  player.on('start', async () => {
+    return await NowPlaying(message);
   });
 
-  player.once('trackStart', async (_, track) => {
-    const embed = MessageHelpers.NowPlayingEmbed(track);
+  player.on('end', async () => {
+    const nextTrack = await PlayNext({ message, manager });
 
-    return await message.channel
-      .send({ embeds: [embed], isInteraction: false })
-      .then(
-        async (message) =>
-          await MessageHelpers.DeleteMessage({ message, timeout: 5000 }),
-      );
+    if (nextTrack) return await player.play(nextTrack.track);
   });
 
-  player.once('tracksAdd', async (_, tracks) => {
-    return await message.channel
-      .send({
-        content: `Added ${tracks.length} to the Queue!`,
-        isInteraction: false,
-      })
-      .then(
-        async (message) =>
-          await MessageHelpers.DeleteMessage({ message, timeout: 5000 }),
-      );
-  });
+  if (song) await AddTrack({ song, message });
+  if (songs) await AddTracks({ songs, message });
 
-  player.once('trackAdd', async (_, track) => {
-    return await message.channel
-      .send({
-        content: `Added ${track.title} to the Queue!`,
-        isInteraction: false,
-      })
-      .then(
-        async (message) =>
-          await MessageHelpers.DeleteMessage({ message, timeout: 5000 }),
-      );
-  });
+  if (!player.playing) {
+    const queue = await FindCreateQueue(message.guildId!);
 
-  if (song) queue.addTrack(song);
-  if (songs?.length) queue.addTracks(songs);
-
-  const playerIsConnected = queue && queue.connection;
-
-  if (!playerIsConnected) {
-    await PlayerHelpers.JoinServer({ message, queue });
-    try {
-      queue.setVolume(80);
-      queue.tracks.length && (await queue.play());
-    } catch {
-      await message.channel
-        .send({
-          content: 'Could not join your voice channel!',
-          isInteraction: false,
-        })
-        .then(
-          async (message) =>
-            await MessageHelpers.DeleteMessage({ message, timeout: 3000 }),
-        );
-    }
+    await player.volume(80);
+    await player.play(queue.current.track);
   }
+
+  return mongoose.connection.close();
 };
 
 interface PlayProps {
   message: Message;
-  song?: Track;
-  songs?: Track[];
-  player: Player;
+  song?: VolcanoTrack;
+  songs?: VolcanoTrack[];
+  manager: Manager;
 }
 
 export default PlayHelper;
