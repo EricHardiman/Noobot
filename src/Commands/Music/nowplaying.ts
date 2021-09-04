@@ -1,5 +1,12 @@
-import { Queue } from 'discord-player';
-import { MathHelpers, MessageHelpers } from '../../Helpers';
+import { Player } from 'lavacord';
+import { IQueue } from '../../Database/Queue';
+import {
+  ConvertSecondsToString,
+  DeleteMessage,
+  FindCreateQueue,
+  NowPlayingEmbed,
+  RetrievePlayer,
+} from '../../Helpers';
 import { Command } from '../../Interfaces';
 
 export const command: Command = {
@@ -7,30 +14,32 @@ export const command: Command = {
   description: 'Pauses whatever is playing.',
   aliases: ['np'],
   run: async (client, message) => {
-    const queue = client.player.getQueue(message.guildId!);
-    const isPlaying = queue && queue.playing;
+    const { manager } = client;
+    const queue = await FindCreateQueue(message.guildId!);
+    const isPlaying = queue && queue.current;
 
     if (isPlaying) {
-      const embed = MessageHelpers.NowPlayingEmbed(queue.current);
-      embed.setDescription(handlePlayingBar(queue));
+      const player = RetrievePlayer(manager, message);
+      const embed = NowPlayingEmbed(queue.current);
+
+      embed.setDescription(handlePlayingBar(queue, player!));
 
       return await message.channel
         .send({ embeds: [embed] })
         .then(
-          async (message) =>
-            await MessageHelpers.DeleteMessage({ message, timeout: 10000 }),
+          async (message) => await DeleteMessage({ message, timeout: 10000 }),
         );
     }
-
-    return;
+    return message.channel
+      .send('Nothing playing at the moment.')
+      .then((message) => DeleteMessage({ message, timeout: 5000 }));
   },
 };
 
-const handlePlayingBar = (queue: Queue): string => {
+const handlePlayingBar = (queue: IQueue, player: Player): string => {
   const twentyDashes = '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬';
-  const secondsPassed =
-    queue.connection.audioPlayer.state['playbackDuration'] / 1000;
-  const currentSongDuration = queue.current.durationMS / 1000;
+  const secondsPassed = player.state.position! / 1000;
+  const currentSongDuration = queue.current.info.length / 1000;
 
   const playingDotIndex = Math.floor(
     secondsPassed / currentSongDuration / 0.05,
@@ -40,7 +49,7 @@ const handlePlayingBar = (queue: Queue): string => {
     '🔵' +
     twentyDashes.slice(playingDotIndex, 19);
 
-  return `${playingBar} ${MathHelpers.ConvertSecondsToString(
+  return `${playingBar} ${ConvertSecondsToString(
     Math.floor(secondsPassed),
-  )} /${MathHelpers.ConvertSecondsToString(currentSongDuration)}`;
+  )} /${ConvertSecondsToString(currentSongDuration)}`;
 };

@@ -1,55 +1,62 @@
-import { Player, Track } from "discord-player";
-import { GuildMember, Message } from "discord.js";
-import { GetCurrentPlayingTrack } from ".";
-import { DatabaseHelpers } from "..";
+import { GuildMember, Message } from 'discord.js';
+import { Manager } from 'lavacord';
+import { GetCurrentPlayingTrack } from '.';
+import { RetrieveSpotifyLink } from '../Database';
+import { VolcanoTrack } from '../../global';
+import { SongSearch } from '..';
 
 const SongFromPresence = async ({
   args,
-  player,
+  manager,
   message,
-}: PresenceProps): Promise<{ song: Track; foundUser: GuildMember } | void> => {
+}: PresenceProps): Promise<{
+  song: VolcanoTrack;
+  foundUser: GuildMember;
+} | void> => {
   const taggedUser = args
-    .join("")
+    .join('')
     .match(/(?<=<@!)(.*)(?=\>)/g)
-    ?.join("");
+    ?.join('');
 
   const foundUser = message.guild?.members.cache.get(
-    taggedUser ?? message.author.id
+    taggedUser ?? message.author.id,
   )!;
 
-  const spotifyLink = await DatabaseHelpers.RetrieveSpotifyLink(foundUser.id);
+  const spotifyLink = await RetrieveSpotifyLink(foundUser.id);
 
   if (spotifyLink) {
     const spotifyReturn = await GetCurrentPlayingTrack(spotifyLink);
 
-    const [song] = (
-      await player.search(spotifyReturn, {
-        requestedBy: message.author,
-      })
-    ).tracks;
+    const {
+      tracks: [song],
+    } = await SongSearch({
+      manager,
+      search: spotifyReturn,
+    });
 
     return { song, foundUser };
   } else {
     const { presence } = foundUser;
 
     const userPresence = presence?.activities.find(
-      (activity) => activity.name === "Spotify"
+      (activity) => activity.name === 'Spotify',
     )!;
 
     if (!userPresence) return;
 
-    const [song] = (
-      await player.search(`${userPresence.details} ${userPresence.state}`, {
-        requestedBy: message.author,
-      })
-    ).tracks;
+    const {
+      tracks: [song],
+    } = await SongSearch({
+      manager,
+      search: `${userPresence.details} ${userPresence.state}`,
+    });
 
     return { song, foundUser };
   }
 };
 
 interface PresenceProps {
-  player: Player;
+  manager: Manager;
   message: Message;
   args: any[];
 }

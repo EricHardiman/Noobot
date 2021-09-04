@@ -1,16 +1,14 @@
-import { Track } from 'discord-player';
 import { EmbedField } from 'discord.js';
-import { MathHelpers } from '..';
+import { ConvertSecondsToString } from '..';
+import { VolcanoTrack } from '../../global';
 
 const TrackSelectionEmbed = (
-  { title, author, durationMS, url }: Track,
+  { info: { title, length, author, uri } }: VolcanoTrack,
   index: number,
 ): EmbedField => {
   const name = `${index + 1}.  ${title}`;
-  const convertedDuration = MathHelpers.ConvertSecondsToString(
-    durationMS / 1000,
-  );
-  const value = `${author} - ${convertedDuration} - [Link](${url})`;
+  const convertedDuration = ConvertSecondsToString(length / 1000);
+  const value = `${author} - ${convertedDuration} - [Link](${uri})`;
 
   return { name, value, inline: false };
 };

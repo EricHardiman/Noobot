@@ -1,7 +1,6 @@
 import { ButtonInteraction, Message, MessageEmbed } from 'discord.js';
 import { AnyDealGame } from '../global';
-import { MessageHelpers } from '../Helpers';
-import { GetGamePrice } from '../Helpers/Fetch';
+import { DeleteMessage, GetGamePrice } from '../Helpers';
 
 const AnyDealCollector = ({
   sentMessage,
@@ -37,7 +36,7 @@ const AnyDealCollector = ({
   });
 
   collector.on('end', async () => {
-    await MessageHelpers.DeleteMessage({
+    await DeleteMessage({
       messages: [originalMessage, sentMessage],
     });
   });

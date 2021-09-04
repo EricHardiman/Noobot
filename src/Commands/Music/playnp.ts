@@ -1,24 +1,28 @@
-import { MessageHelpers, MusicHelpers } from '../../Helpers';
-import SongFromPresence from '../../Helpers/Spotify/SongFromPresence';
+import {
+  DeleteMessage,
+  Play,
+  RetrievePlayer,
+  SongFromPresence,
+} from '../../Helpers';
 import { Command } from '../../Interfaces';
 
 export const command: Command = {
   name: 'playnp',
   description: 'Plays song currently being listened to by you/tagged user',
   run: async (client, message, args) => {
-    const { player } = client;
-    await MessageHelpers.DeleteMessage({ message });
+    const { manager } = client;
+    await DeleteMessage({ message });
 
     const songAndUser = await SongFromPresence({
       args,
       message,
-      player,
+      manager,
     });
 
     if (songAndUser) {
       const { song } = songAndUser;
 
-      return MusicHelpers.Play({ message, player, song });
+      return Play({ message, manager, song });
     }
   },
 };

@@ -42,3 +42,17 @@ export interface SpotifyPlaylist {
     items: Array<{ track: SpotifyTrack }>;
   };
 }
+
+export interface VolcanoTrack {
+  track: string;
+  info: {
+    identifier: string;
+    isSeekable: boolean;
+    author: string;
+    length: number;
+    isStream: boolean;
+    position: number;
+    title: string;
+    uri: string;
+  };
+}

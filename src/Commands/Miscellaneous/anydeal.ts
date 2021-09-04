@@ -4,11 +4,10 @@ import {
   MessageButton,
   MessageEmbed,
 } from 'discord.js';
-import { GetGameTitle } from '../../Helpers/Fetch';
+import { GetGameTitle, DeleteMessage } from '../../Helpers';
 import { Command } from '../../Interfaces';
 import { AnyDealCollector } from '../../Collectors';
 import { AnyDealGame } from '../../global';
-import { MessageHelpers } from '../../Helpers';
 
 export const command: Command = {
   name: 'anydeal',
@@ -23,7 +22,7 @@ export const command: Command = {
     if (!returnedGames.length)
       return await message.channel.send(`No results for ${gameTitle}.`).then(
         async (noResult) =>
-          await MessageHelpers.DeleteMessage({
+          await DeleteMessage({
             messages: [message, noResult],
             timeout: 5000,
           }),

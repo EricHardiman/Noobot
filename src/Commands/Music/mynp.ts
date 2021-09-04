@@ -1,18 +1,18 @@
-import { MessageEmbed } from "discord.js";
-import { MessageHelpers, SpotifyHelpers } from "../../Helpers";
-import { Command } from "../../Interfaces";
+import { MessageEmbed } from 'discord.js';
+import { DeleteMessage, SongFromPresence } from '../../Helpers';
+import { Command } from '../../Interfaces';
 
 export const command: Command = {
-  name: "mynp",
-  description: "Posts which song currently playing on Spotify.",
+  name: 'mynp',
+  description: 'Posts which song currently playing on Spotify.',
   run: async (client, message, args) => {
-    const { player } = client;
-    await MessageHelpers.DeleteMessage({ message });
+    const { manager } = client;
+    await DeleteMessage({ message });
 
-    const songAndUser = await SpotifyHelpers.SongFromPresence({
+    const songAndUser = await SongFromPresence({
       args,
       message,
-      player,
+      manager,
     });
 
     if (songAndUser) {
@@ -24,9 +24,8 @@ export const command: Command = {
       const embed = new MessageEmbed()
         .setAuthor(`${displayName}'s Spotify is Currently Playing`)
         .setColor(displayColor)
-        .setTitle(song.title)
-        .setURL(song.url)
-        .setThumbnail(song.thumbnail);
+        .setTitle(song.info.title)
+        .setURL(song.info.uri);
 
       return await message.channel.send({ embeds: [embed] });
     }

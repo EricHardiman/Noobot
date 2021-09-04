@@ -1,12 +1,13 @@
 import { ButtonInteraction, Message } from 'discord.js';
-import { Player, Track } from 'discord-player';
-import { MessageHelpers, MusicHelpers } from '../Helpers';
+import { Manager } from 'lavacord';
+import { VolcanoTrack } from '../global';
+import { DeleteMessage, Play } from '../Helpers';
 
 const SongSearchCollector = ({
   sentMessage,
   originalMessage,
   songs,
-  player,
+  manager,
 }: SongSearchProps) => {
   const filter = (i: ButtonInteraction) =>
     i.user.id === originalMessage.author.id;
@@ -20,9 +21,9 @@ const SongSearchCollector = ({
     const [, songIndex] = i.customId.split('-');
     const selectedSong = songs[songIndex];
 
-    await MusicHelpers.Play({
+    await Play({
       message: originalMessage,
-      player,
+      manager,
       song: selectedSong,
     });
 
@@ -31,11 +32,11 @@ const SongSearchCollector = ({
 
   collector.on('end', async (collection, reason) => {
     if (reason === 'stop') {
-      return await MessageHelpers.DeleteMessage({ message: sentMessage });
+      return await DeleteMessage({ message: sentMessage });
     }
 
     if (![...collection.values()].length)
-      return await MessageHelpers.DeleteMessage({
+      return await DeleteMessage({
         messages: [originalMessage, sentMessage],
       });
   });
@@ -44,8 +45,8 @@ const SongSearchCollector = ({
 interface SongSearchProps {
   sentMessage: Message;
   originalMessage: Message;
-  songs: Track[];
-  player: Player;
+  songs: VolcanoTrack[];
+  manager: Manager;
 }
 
 export default SongSearchCollector;

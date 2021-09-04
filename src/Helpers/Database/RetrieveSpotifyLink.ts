@@ -29,6 +29,8 @@ const RetrieveSpotifyLink = async (discordId: string) => {
     spotifyLink.access_token = data.access_token;
   }
 
+  mongoose.connection.close();
+
   return spotifyLink;
 };
 

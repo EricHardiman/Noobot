@@ -1,38 +1,29 @@
-import { Track } from 'discord-player';
 import { Command } from '../../Interfaces';
 import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
 import SongSearchCollector from '../../Collectors/SongSearch';
-import { MessageHelpers } from '../../Helpers';
+import { SongSearch, TrackSelectionEmbed } from '../../Helpers';
 
 export const command: Command = {
   name: 'search',
   description: 'Search YouTube for Song and return first three results.',
   run: async (client, message, args) => {
-    const { player } = client;
-    const songSearch = args.join('');
-    if (!songSearch) return;
+    const { manager } = client;
+    const search = args.join('');
+    if (!search) return;
 
-    let returnedSongs: Track[];
+    const tracks = (await SongSearch({ manager, search })).tracks.slice(0, 3);
 
-    try {
-      returnedSongs = (
-        await player.search(songSearch, { requestedBy: message.author })
-      ).tracks.slice(0, 3);
-    } catch {
-      returnedSongs = [];
-    }
-
-    if (!returnedSongs.length) return;
+    if (!tracks.length) return;
 
     const embed = new MessageEmbed({
       title: 'Please Select a Song:',
       color: 'BLURPLE',
-      fields: returnedSongs.map(MessageHelpers.TrackSelectionEmbed),
+      fields: tracks.map(TrackSelectionEmbed),
     });
 
     const buttonRow = new MessageActionRow();
 
-    for (const index in returnedSongs) {
+    for (const index in tracks) {
       buttonRow.addComponents(
         new MessageButton()
           .setCustomId(`songSearch-${index}`)
@@ -47,8 +38,8 @@ export const command: Command = {
         SongSearchCollector({
           originalMessage: message,
           sentMessage,
-          songs: returnedSongs,
-          player,
+          songs: tracks,
+          manager,
         }),
       );
   },

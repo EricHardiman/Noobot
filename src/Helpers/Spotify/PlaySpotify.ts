@@ -1,11 +1,11 @@
-import { Player } from 'discord-player';
 import { Message } from 'discord.js';
-import { MusicHelpers } from '..';
+import { Manager } from 'lavacord';
+import { Play, SongSearch } from '..';
 import SpotifyMatch from './SpotifyMatch';
 
 const PlaySpotify = async ({
   message,
-  player,
+  manager,
   spotifyMatch,
 }: PlaySpotifyProps) => {
   const [searchType, searchId] = spotifyMatch!.toString().split('/');
@@ -19,25 +19,19 @@ const PlaySpotify = async ({
   if (Array.isArray(spotifyReturn)) {
     const songs = await Promise.all(
       spotifyReturn.map(
-        async (search) =>
-          (
-            await player.search(search, { requestedBy: message.author })
-          ).tracks[0],
+        async (search) => (await SongSearch({ manager, search })).tracks[0],
       ),
     );
-
-    return MusicHelpers.Play({ message, player, songs });
+    return Play({ message, manager, songs });
   } else {
-    const [song] = (
-      await player.search(spotifyReturn, { requestedBy: message.author })
-    ).tracks;
-
-    return MusicHelpers.Play({ message, player, song });
+    const [song] = (await SongSearch({ manager, search: spotifyReturn }))
+      .tracks;
+    return Play({ message, manager, song });
   }
 };
 
 interface PlaySpotifyProps {
-  player: Player;
+  manager: Manager;
   spotifyMatch: RegExpMatchArray | null;
   message: Message;
 }

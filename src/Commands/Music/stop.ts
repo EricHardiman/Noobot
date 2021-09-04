@@ -1,11 +1,22 @@
+import { ClearQueue, DeleteMessage, RetrievePlayer } from '../../Helpers';
 import { Command } from '../../Interfaces';
 
 export const command: Command = {
   name: 'stop',
   description: 'Leaves voice channel, clears queue, destroys player.',
   run: async (client, message) => {
-    const queue = client.player.getQueue(message.guildId!);
+    const { manager } = client;
+    const player = RetrievePlayer(manager, message);
 
-    if (queue) queue.destroy();
+    if (player && player.playing) {
+      await player.destroy();
+      await manager.leave(message.guildId!);
+
+      return await ClearQueue(message.guildId!);
+    } else {
+      return message.channel
+        .send('Nothing playing.')
+        .then((message) => DeleteMessage({ message, timeout: 3000 }));
+    }
   },
 };

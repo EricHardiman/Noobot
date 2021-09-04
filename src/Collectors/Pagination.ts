@@ -1,6 +1,5 @@
 import { ButtonInteraction, EmbedField, Message } from 'discord.js';
-import { Player, Track } from 'discord-player';
-import { MessageHelpers, MusicHelpers } from '../Helpers';
+import { DeleteMessage, CreatePagination } from '../Helpers';
 
 const PaginationCollector = ({
   sentMessage,
@@ -20,7 +19,7 @@ const PaginationCollector = ({
     const [direction, arrStart, arrEnd, currentPage] = i.customId.split('-');
 
     if (direction === 'delete') {
-      await MessageHelpers.DeleteMessage({ message: originalMessage });
+      await DeleteMessage({ message: originalMessage });
       return collector.stop('delete');
     }
 
@@ -42,7 +41,7 @@ const PaginationCollector = ({
         break;
     }
 
-    const { embeds, components } = MessageHelpers.CreatePagination({
+    const { embeds, components } = CreatePagination({
       options,
       arrStart: newStart,
       arrEnd: newEnd,
@@ -56,7 +55,7 @@ const PaginationCollector = ({
 
   collector.on('end', async (_, reason) => {
     if (reason === 'time') {
-      await MessageHelpers.DeleteMessage({
+      await DeleteMessage({
         messages: [originalMessage, sentMessage],
       });
     }
