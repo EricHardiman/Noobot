@@ -1,3 +1,4 @@
+import { Player } from 'lavacord';
 import { DeleteMessage, RetrievePlayer } from '../../Helpers';
 import { Command } from '../../Interfaces';
 
@@ -7,7 +8,7 @@ export const command: Command = {
   aliases: ['vol'],
   run: async (client, message, args) => {
     const { manager } = client;
-    const player = RetrievePlayer(manager, message);
+    const player = RetrievePlayer(manager, message) as Player;
     const isPlaying = player && player.playing;
 
     if (!args.length && isPlaying) {
