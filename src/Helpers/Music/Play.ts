@@ -18,19 +18,19 @@ const PlayHelper = async ({ message, manager, song, songs }: PlayProps) => {
   const player =
     RetrievePlayer(manager, message) ?? (await JoinVoice(manager, message));
 
-  player.removeAllListeners('start');
-  player.removeAllListeners('end');
-
-  player.on('start', async () => {
+  player.once('start', async () => {
+    player.removeAllListeners('start');
     return await NowPlaying(message);
   });
 
-  player.on('end', async () => {
+  player.once('end', async () => {
+    player.removeAllListeners('end');
     const nextTrack = await PlayNext({ message, manager });
 
     if (nextTrack) {
       return await player.play(nextTrack.track);
     } else {
+      await manager.leave(message.guildId!);
       return await ClearQueue(message.guildId!);
     }
   });

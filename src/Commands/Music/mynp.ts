@@ -25,7 +25,10 @@ export const command: Command = {
         .setAuthor(`${displayName}'s Spotify is Currently Playing`)
         .setColor(displayColor)
         .setTitle(song.info.title)
-        .setURL(song.info.uri);
+        .setURL(song.info.uri)
+        .setThumbnail(
+          `https://i.ytimg.com/vi/${song.info.identifier}/hqdefault.jpg`,
+        );
 
       return await message.channel.send({ embeds: [embed] });
     }
