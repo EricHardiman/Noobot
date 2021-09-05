@@ -4,7 +4,14 @@ import { Message } from 'discord.js';
 import { Manager } from 'lavacord';
 import { NowPlaying, RetrievePlayer } from '.';
 import { VolcanoTrack } from '../../global';
-import { FindCreateQueue, JoinVoice, AddTrack, AddTracks, PlayNext } from '..';
+import {
+  FindCreateQueue,
+  JoinVoice,
+  AddTrack,
+  AddTracks,
+  PlayNext,
+  ClearQueue,
+} from '..';
 
 const PlayHelper = async ({ message, manager, song, songs }: PlayProps) => {
   const mongoose = await Mongoose.connect(MONGOOSE_URL);
@@ -21,7 +28,11 @@ const PlayHelper = async ({ message, manager, song, songs }: PlayProps) => {
   player.on('end', async () => {
     const nextTrack = await PlayNext({ message, manager });
 
-    if (nextTrack) return await player.play(nextTrack.track);
+    if (nextTrack) {
+      return await player.play(nextTrack.track);
+    } else {
+      return await ClearQueue(message.guildId!);
+    }
   });
 
   if (song) await AddTrack({ song, message });

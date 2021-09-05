@@ -8,8 +8,8 @@ export const command: Command = {
   run: async (client, message, args) => {
     const { manager } = client;
     const player = RetrievePlayer(manager, message);
-
     const isPlaying = player && player.playing;
+
     if (!args.length && isPlaying) {
       return await message.channel
         .send(`Current volume level is ${player.state.volume}%`)
