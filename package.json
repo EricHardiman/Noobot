@@ -26,7 +26,8 @@
     "lavacord": "^1.1.9",
     "mongoose": "^6.0.0",
     "node-spotify-api": "^1.1.1",
-    "prism-media": "^1.3.2"
+    "prism-media": "^1.3.2",
+    "puppeteer": "^10.2.0"
   },
   "devDependencies": {
     "@types/node": "^16.4.13",

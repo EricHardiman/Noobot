@@ -22,7 +22,10 @@ const PlaySpotify = async ({
         async (search) => (await SongSearch({ manager, search })).tracks[0],
       ),
     );
-    return Play({ message, manager, songs });
+
+    const filteredUndefinedSongs = songs.filter((song) => song);
+
+    return Play({ message, manager, songs: filteredUndefinedSongs });
   } else {
     const [song] = (await SongSearch({ manager, search: spotifyReturn }))
       .tracks;

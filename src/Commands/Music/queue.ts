@@ -7,6 +7,7 @@ import {
   TrackSelectionEmbed,
 } from '../../Helpers';
 import { Command } from '../../Interfaces';
+import { EmbedField } from 'discord.js';
 
 export const command: Command = {
   name: 'queue',
@@ -24,6 +25,7 @@ export const command: Command = {
         );
 
     const options = queue.tracks.map(TrackSelectionEmbed);
+
     if (player && player.playing) {
       const title = `Current ${message.guild?.name} Queue`;
       const { embeds, components } = CreatePagination({

@@ -2,7 +2,7 @@ import { Command } from '../../Interfaces';
 
 export const command: Command = {
   name: 'roll',
-  description: 'Rolls 1-100 dice, defaults to 2."',
+  description: 'Rolls 1-100 dice, defaults to 2.',
   run: async (_client, message, args) => {
     const [argRolls] = args;
     let numOfRolls = 2;

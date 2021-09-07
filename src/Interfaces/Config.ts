@@ -7,4 +7,5 @@ export interface Config {
   MONGOOSE_URL: string;
   VOLCANO_PASSWORD: string;
   OWNERS: string[];
+  IMDB_URL: string;
 }
