@@ -13,11 +13,13 @@ const GetCurrentPlayingTrack = async (spotifyLink: ISpotifyLink) => {
     headers: { Authorization: `Bearer ${access_token}` },
   });
 
+  if (!item) return;
+
   const { name, artists } = item as SpotifyTrack;
 
-  const artistNames = artists.map((artist) => artist.name).join(', ');
+  const artistName = [artists[0].name];
 
-  return `${name} ${artistNames}`;
+  return `${name} ${artistName}`;
 };
 
 export default GetCurrentPlayingTrack;

@@ -1,3 +1,5 @@
 import DiscordClient from './Client';
 
-new DiscordClient().init();
+try {
+  new DiscordClient().init();
+} catch {}

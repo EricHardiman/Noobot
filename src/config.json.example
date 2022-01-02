@@ -1,0 +1,12 @@
+{
+  "TOKEN": "",
+  "PREFIX": "!",
+  "ANY_DEAL_TOKEN": "",
+  "SPOTIFY_ID": "",
+  "MONGOOSE_URL": "",
+  "SPOTIFY_SECRET": "",
+  "VOLCANO_PASSWORD": "",
+  "OWNERS": ["92706551487291392"],
+  "IMDB_URL": "",
+  "WATCH_SECRET": ""
+}

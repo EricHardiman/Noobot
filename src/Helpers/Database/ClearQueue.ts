@@ -1,7 +1,6 @@
 import Mongoose from 'mongoose';
 import { MONGOOSE_URL } from '../../config.json';
 import Queue from '../../Database/Queue';
-import { VolcanoTrack } from '../../global';
 
 const ClearQueue = async (guildId: string) => {
   const mongoose = await Mongoose.connect(MONGOOSE_URL);

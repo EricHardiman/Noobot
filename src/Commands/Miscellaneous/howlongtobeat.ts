@@ -6,11 +6,11 @@ export const command: Command = {
   name: 'howlongtobeat',
   aliases: ['hltb'],
   description: 'Searches How Long to Beat for game times.',
-  run: async (_client, message, [game]) => {
+  run: async (_client, message, game) => {
     if (!game) return;
 
     const hltbService = new HowLongToBeatService();
-    const [result] = await hltbService.search(game);
+    const [result] = await hltbService.search(game.join(' '));
 
     if (!result) return await message.reply('Unable to find game.');
 

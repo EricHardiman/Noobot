@@ -1,7 +1,7 @@
 import path from 'path';
 import { readdirSync } from 'fs';
 import { Client, Intents, Collection } from 'discord.js';
-import config, { TOKEN } from '../config.json';
+import config, { TOKEN, VOLCANO_PASSWORD } from '../config.json';
 import { Command, Config, Event } from '../Interfaces';
 import { Manager } from 'lavacord';
 
@@ -55,7 +55,7 @@ export default class DiscordClient extends Client {
 
   public async initVolcano(client: Client) {
     const nodes = [
-      { id: '1', host: 'localhost', port: 2333, password: 'helloThere!' },
+      { id: '1', host: 'localhost', port: 2333, password: VOLCANO_PASSWORD },
     ];
 
     this.manager = new Manager(nodes, {

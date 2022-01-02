@@ -3,8 +3,8 @@ import { Message, MessageEmbed } from 'discord.js';
 import mongoose from 'mongoose';
 import SpotifyLink from '../Database/SpotifyLink';
 import { DeleteMessage } from '../Helpers';
+import { MONGOOSE_URL } from '../config.json';
 
-const url = 'mongodb://localhost:27017/Noobot';
 const LinkSpotifyCollector = ({
   sentMessage,
   originalMessage,
@@ -21,7 +21,7 @@ const LinkSpotifyCollector = ({
       return await DeleteMessage({ message: sentMessage });
 
     if (customId === 'finished') {
-      await mongoose.connect(url);
+      await mongoose.connect(MONGOOSE_URL);
 
       await SpotifyLink.findOne({
         discordId: originalMessage.author.id,
