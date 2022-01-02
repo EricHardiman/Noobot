@@ -8,4 +8,5 @@ export interface Config {
   VOLCANO_PASSWORD: string;
   OWNERS: string[];
   IMDB_URL: string;
+  WATCH_SECRET: string;
 }

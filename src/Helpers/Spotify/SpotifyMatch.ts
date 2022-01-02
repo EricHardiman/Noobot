@@ -8,9 +8,9 @@ const handleSpotifyReturn = ({
   artists,
   name,
 }: Pick<SpotifyTrack, 'name' | 'artists'>) => {
-  const artistNames = artists.map((artist) => artist.name).join(', ');
+  const artistName = [artists[0].name];
 
-  return `${name} ${artistNames}`;
+  return `${name} ${artistName}`;
 };
 
 const SpotifyMatch = async ({

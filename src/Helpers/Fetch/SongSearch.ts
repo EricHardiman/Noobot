@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LavalinkNode, Manager } from 'lavacord';
+import { Manager } from 'lavacord';
 import { VolcanoTrack } from '../../global';
 
 const SongSearch = async ({

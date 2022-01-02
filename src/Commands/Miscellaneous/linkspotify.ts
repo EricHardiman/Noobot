@@ -4,6 +4,7 @@ import LinkSpotifyCollector from '../../Collectors/LinkSpotify';
 import SpotifyLink from '../../Database/SpotifyLink';
 import { DeleteMessage } from '../../Helpers';
 import { Command } from '../../Interfaces';
+import { MONGOOSE_URL } from '../../config.json';
 
 const handleActionRow = (buttonsDisabled: boolean): MessageActionRow =>
   new MessageActionRow().addComponents(
@@ -19,8 +20,6 @@ const handleActionRow = (buttonsDisabled: boolean): MessageActionRow =>
       .setDisabled(buttonsDisabled),
   );
 
-const url = 'mongodb://localhost:27017/Noobot';
-
 export const command: Command = {
   name: 'linkspotify',
   description:
@@ -30,13 +29,13 @@ export const command: Command = {
     const secret = Math.random().toString(36).substr(2, 8);
     const discordId = message.author.id;
 
-    await mongoose.connect(url);
+    await mongoose.connect(MONGOOSE_URL);
 
     const newLink = new SpotifyLink({
       discordId,
       state: secret,
-      access_token: '',
-      refresh_token: '',
+      access_token: 'new',
+      refresh_token: 'new',
     });
 
     const { state, access_token, refresh_token } = newLink;
@@ -55,8 +54,6 @@ export const command: Command = {
 
       return await SpotifyLink.create(newLink);
     });
-
-    await mongoose.connection.close();
 
     const embed = new MessageEmbed()
       .setAuthor('Link Spotify to Noobot')
@@ -85,5 +82,7 @@ export const command: Command = {
           }),
         );
     }, 5000);
+
+    return await mongoose.connection.close();
   },
 };

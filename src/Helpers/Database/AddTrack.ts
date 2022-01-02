@@ -21,7 +21,12 @@ const AddTrack = async ({ message, song }: AddTrackProps): Promise<void> => {
 
   await message.channel
     .send(`Added ${song.info.title} to Queue!`)
-    .then((message) => DeleteMessage({ message, timeout: 3000 }));
+    .then((newMessage) =>
+      DeleteMessage({
+        messages: [newMessage, message],
+        timeout: 3000,
+      }),
+    );
 
   return await mongoose.connection.close();
 };

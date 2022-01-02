@@ -15,25 +15,8 @@ import {
 
 const PlayHelper = async ({ message, manager, song, songs }: PlayProps) => {
   const mongoose = await Mongoose.connect(MONGOOSE_URL);
-  const player =
-    RetrievePlayer(manager, message) ?? (await JoinVoice(manager, message));
-
-  player.once('start', async () => {
-    player.removeAllListeners('start');
-    return await NowPlaying(message);
-  });
-
-  player.once('end', async () => {
-    player.removeAllListeners('end');
-    const nextTrack = await PlayNext({ message, manager });
-
-    if (nextTrack) {
-      return await player.play(nextTrack.track);
-    } else {
-      await manager.leave(message.guildId!);
-      return await ClearQueue(message.guildId!);
-    }
-  });
+  const existingPlayer = RetrievePlayer(manager, message);
+  const player = existingPlayer ?? (await JoinVoice(manager, message));
 
   if (song) await AddTrack({ song, message });
   if (songs) await AddTracks({ songs, message });
@@ -43,6 +26,23 @@ const PlayHelper = async ({ message, manager, song, songs }: PlayProps) => {
 
     await player.volume(80);
     await player.play(queue.current.track);
+
+    player.on('start', async () => {
+      return await NowPlaying(message);
+    });
+
+    player.on('end', async ({ reason }) => {
+      if (reason === 'REPLACED') return;
+
+      const nextTrack = await PlayNext({ message, manager });
+
+      if (nextTrack) {
+        return await player.play(nextTrack.track);
+      } else {
+        await manager.leave(message.guildId!);
+        return await ClearQueue(message.guildId!);
+      }
+    });
   }
 
   return mongoose.connection.close();

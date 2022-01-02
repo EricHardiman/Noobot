@@ -27,6 +27,8 @@ const SongFromPresence = async ({
   if (spotifyLink) {
     const spotifyReturn = await GetCurrentPlayingTrack(spotifyLink);
 
+    if (!spotifyReturn) return;
+
     const {
       tracks: [song],
     } = await SongSearch({

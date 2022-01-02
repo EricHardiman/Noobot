@@ -8,7 +8,7 @@ export const command: Command = {
     const { manager } = client;
     const player = RetrievePlayer(manager, message);
 
-    if (player && player.playing) {
+    if (player) {
       await player.destroy();
       await manager.leave(message.guildId!);
 
