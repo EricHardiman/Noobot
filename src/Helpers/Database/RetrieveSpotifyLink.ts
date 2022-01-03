@@ -16,7 +16,7 @@ const RetrieveSpotifyLink = async (discordId: string) => {
       params: {
         grant_type: 'refresh_token',
         refresh_token,
-        redirect_uri: 'https://noobot.tacoreel.app/callback',
+        redirect_uri: 'https://garbanzo.tacoreel.app/callback',
         client_id: SPOTIFY_ID,
         client_secret: SPOTIFY_SECRET,
       },

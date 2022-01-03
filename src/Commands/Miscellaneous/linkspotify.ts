@@ -58,7 +58,9 @@ export const command: Command = {
     const embed = new MessageEmbed()
       .setAuthor('Link Spotify to Noobot')
       .setTitle('Click Here')
-      .setURL(`https://noobot.tacoreel.app/login?state=${secret}-${discordId}`)
+      .setURL(
+        `https://garbanzo.tacoreel.app/login?state=${secret}-${discordId}`,
+      )
       .setDescription(
         'After you click the URL above, come back to this message and click Finished',
       )
