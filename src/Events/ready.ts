@@ -8,5 +8,8 @@ export const event: Event = {
 
     await client.initVolcano(client);
     console.log('Connected to Volcano!');
+
+    await client.initMongoDb();
+    console.log('Connected to MongoDB!');
   },
 };

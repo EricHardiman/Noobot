@@ -15,7 +15,7 @@ const SongFromPresence = async ({
 } | void> => {
   const taggedUser = args
     .join('')
-    .match(/(?<=<@!)(.*)(?=\>)/g)
+    .match(/(?<=\<@)(.*?)(?=\>)/g)
     ?.join('');
 
   const foundUser = message.guild?.members.cache.get(

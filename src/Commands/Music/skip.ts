@@ -12,8 +12,7 @@ export const command: Command = {
       const nextTrack = await PlayNext({ message, manager });
 
       if (nextTrack) {
-        await player.play(nextTrack.track);
-        return await NowPlaying(message);
+        return await player.play(nextTrack.track);
       }
 
       return;

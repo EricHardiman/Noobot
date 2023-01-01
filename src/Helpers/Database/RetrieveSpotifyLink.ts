@@ -1,10 +1,8 @@
 import axios from 'axios';
-import Mongoose from 'mongoose';
 import SpotifyLink from '../../Database/SpotifyLink';
-import { MONGOOSE_URL, SPOTIFY_ID, SPOTIFY_SECRET } from '../../config.json';
+import { SPOTIFY_ID, SPOTIFY_SECRET } from '../../config.json';
 
 const RetrieveSpotifyLink = async (discordId: string) => {
-  const mongoose = await Mongoose.connect(MONGOOSE_URL);
   const spotifyLink = await SpotifyLink.findOne({ discordId });
 
   if (spotifyLink) {
@@ -28,8 +26,6 @@ const RetrieveSpotifyLink = async (discordId: string) => {
     );
     spotifyLink.access_token = data.access_token;
   }
-
-  mongoose.connection.close();
 
   return spotifyLink;
 };

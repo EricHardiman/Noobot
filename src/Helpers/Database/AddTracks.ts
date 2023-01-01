@@ -1,6 +1,4 @@
-import Mongoose from 'mongoose';
 import Queue from '../../Database/Queue';
-import { MONGOOSE_URL } from '../../config.json';
 import { VolcanoTrack } from '../../global';
 import { Message } from 'discord.js';
 import { FindCreateQueue } from '.';
@@ -8,7 +6,6 @@ import { DeleteMessage } from '..';
 
 const AddTracks = async ({ message, songs }: AddTracksProps): Promise<void> => {
   const queue = await FindCreateQueue(message.guildId!);
-  const mongoose = await Mongoose.connect(MONGOOSE_URL);
 
   if (queue.current) {
     await Queue.updateOne(
@@ -23,13 +20,11 @@ const AddTracks = async ({ message, songs }: AddTracksProps): Promise<void> => {
     );
   }
 
-  await message.channel
+  return await message.channel
     .send(`Added ${songs.length} Songs to the Queue!`)
     .then((newMessage) =>
       DeleteMessage({ messages: [newMessage, message], timeout: 3000 }),
     );
-
-  return await mongoose.connection.close();
 };
 
 interface AddTracksProps {

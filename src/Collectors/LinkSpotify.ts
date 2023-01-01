@@ -1,9 +1,7 @@
 import axios from 'axios';
 import { Message, MessageEmbed } from 'discord.js';
-import mongoose from 'mongoose';
 import SpotifyLink from '../Database/SpotifyLink';
 import { DeleteMessage } from '../Helpers';
-import { MONGOOSE_URL } from '../config.json';
 
 const LinkSpotifyCollector = ({
   sentMessage,
@@ -21,8 +19,6 @@ const LinkSpotifyCollector = ({
       return await DeleteMessage({ message: sentMessage });
 
     if (customId === 'finished') {
-      await mongoose.connect(MONGOOSE_URL);
-
       await SpotifyLink.findOne({
         discordId: originalMessage.author.id,
         state: secret,
@@ -62,7 +58,6 @@ const LinkSpotifyCollector = ({
         }
       });
 
-      await mongoose.connection.close();
       return await DeleteMessage({ message: sentMessage });
     }
 

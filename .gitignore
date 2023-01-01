@@ -2,4 +2,5 @@ node_modules
 src/config.json
 build
 .vscode
-Volcano
+Lavalink.jar
+application.yml

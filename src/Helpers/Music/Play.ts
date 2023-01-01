@@ -1,5 +1,3 @@
-import Mongoose from 'mongoose';
-import { MONGOOSE_URL } from '../../config.json';
 import { Message } from 'discord.js';
 import { Manager } from 'lavacord';
 import { NowPlaying, RetrievePlayer } from '.';
@@ -14,7 +12,6 @@ import {
 } from '..';
 
 const PlayHelper = async ({ message, manager, song, songs }: PlayProps) => {
-  const mongoose = await Mongoose.connect(MONGOOSE_URL);
   const existingPlayer = RetrievePlayer(manager, message);
   const player = existingPlayer ?? (await JoinVoice(manager, message));
 
@@ -45,7 +42,7 @@ const PlayHelper = async ({ message, manager, song, songs }: PlayProps) => {
     });
   }
 
-  return mongoose.connection.close();
+  return;
 };
 
 interface PlayProps {

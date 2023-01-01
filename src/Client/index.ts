@@ -1,9 +1,10 @@
 import path from 'path';
 import { readdirSync } from 'fs';
 import { Client, Intents, Collection } from 'discord.js';
-import config, { TOKEN, VOLCANO_PASSWORD } from '../config.json';
+import config, { TOKEN, VOLCANO_PASSWORD, MONGOOSE_URL } from '../config.json';
 import { Command, Config, Event } from '../Interfaces';
 import { Manager } from 'lavacord';
+import mongoose, { Mongoose } from 'mongoose';
 
 export default class DiscordClient extends Client {
   constructor() {
@@ -22,6 +23,7 @@ export default class DiscordClient extends Client {
   public events: Collection<string, Event> = new Collection();
   public config: Config = config;
   public manager!: Manager;
+  public mongoose!: Mongoose;
 
   public init() {
     this.login(TOKEN);
@@ -70,5 +72,9 @@ export default class DiscordClient extends Client {
     });
 
     await this.manager.connect();
+  }
+
+  public async initMongoDb() {
+    this.mongoose = await mongoose.connect(MONGOOSE_URL);
   }
 }

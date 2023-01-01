@@ -10,27 +10,32 @@ export const command: Command = {
     if (!game) return;
 
     const hltbService = new HowLongToBeatService();
-    const [result] = await hltbService.search(game.join(' '));
 
-    if (!result) return await message.reply('Unable to find game.');
+    try {
+      const [result] = await hltbService.search(game.join(' '));
 
-    const { name, imageUrl, timeLabels } = result;
+      if (!result) return await message.reply('Unable to find game.');
 
-    const embedData: MessageEmbedOptions = {
-      title: name,
-      color: 53380,
-      thumbnail: {
-        url: `https://howlongtobeat.com${imageUrl}`,
-      },
-    };
+      const { name, imageUrl, timeLabels } = result;
 
-    const embed = new MessageEmbed(embedData);
+      const embedData: MessageEmbedOptions = {
+        title: name,
+        color: 53380,
+        thumbnail: {
+          url: `https://howlongtobeat.com${imageUrl}`,
+        },
+      };
 
-    for (const [key, phrase] of timeLabels) {
-      if (result[key] > 0) {
-        embed.addField(phrase, `${result[key]} hours`, true);
+      const embed = new MessageEmbed(embedData);
+
+      for (const [key, phrase] of timeLabels) {
+        if (result[key] > 0) {
+          embed.addField(phrase, `${result[key]} hours`, true);
+        }
       }
+      await message.channel.send({ embeds: [embed] });
+    } catch (error) {
+      return await message.reply('Problem searching game.');
     }
-    await message.channel.send({ embeds: [embed] });
   },
 };

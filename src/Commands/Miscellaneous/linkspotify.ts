@@ -1,10 +1,8 @@
 import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
-import mongoose from 'mongoose';
 import LinkSpotifyCollector from '../../Collectors/LinkSpotify';
 import SpotifyLink from '../../Database/SpotifyLink';
 import { DeleteMessage } from '../../Helpers';
 import { Command } from '../../Interfaces';
-import { MONGOOSE_URL } from '../../config.json';
 
 const handleActionRow = (buttonsDisabled: boolean): MessageActionRow =>
   new MessageActionRow().addComponents(
@@ -28,8 +26,6 @@ export const command: Command = {
     await DeleteMessage({ message });
     const secret = Math.random().toString(36).substr(2, 8);
     const discordId = message.author.id;
-
-    await mongoose.connect(MONGOOSE_URL);
 
     const newLink = new SpotifyLink({
       discordId,
@@ -85,6 +81,6 @@ export const command: Command = {
         );
     }, 5000);
 
-    return await mongoose.connection.close();
+    return;
   },
 };
