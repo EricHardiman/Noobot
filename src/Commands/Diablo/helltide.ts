@@ -1,8 +1,13 @@
-import { ChannelType, EmbedBuilder, WebhookClient } from 'discord.js';
+import {
+  AttachmentBuilder,
+  ChannelType,
+  EmbedBuilder,
+  WebhookClient,
+} from 'discord.js';
 import { Command } from '../../Interfaces';
 import { OWNERS, WEBHOOK_ID, WEBHOOK_TOKEN } from '../../config.json';
 import puppeteer from 'puppeteer';
-import { unlinkSync, promises } from 'fs';
+import { existsSync, unlinkSync } from 'fs';
 import { DeleteMessage } from '../../Helpers';
 
 export const command: Command = {
@@ -51,9 +56,9 @@ export const command: Command = {
       title = nextHelltide;
       fields.push({ name: '', value: `Starts in ${remainingTime}!` });
 
-      await promises.access(mapPath).then(() => {
+      if (existsSync(mapPath)) {
         unlinkSync(mapPath);
-      });
+      }
     } else {
       const chestSelector = 'div[style*="background-image"]';
 
@@ -105,12 +110,10 @@ export const command: Command = {
       }
     }
 
-    await promises.access(mapPath).catch(async () => {
-      if (nextHelltide !== 'Next Helltide') {
-        const map = await page.waitForSelector('#map');
-        await map?.screenshot({ path: 'map.png' });
-      }
-    });
+    if (nextHelltide !== 'Next Helltide' && !existsSync(mapPath)) {
+      const map = await page.waitForSelector('#map');
+      await map?.screenshot({ path: 'map.png' });
+    }
 
     const embed = new EmbedBuilder({
       title,
@@ -123,13 +126,11 @@ export const command: Command = {
       token: WEBHOOK_TOKEN,
     });
 
-    const promise = await promises.readFile(mapPath);
-
     webhookClient.send({
       embeds: [embed],
       avatarURL,
       username: 'Noobot',
-      ...(promise && { files: [{ attachment: promise }] }),
+      ...(existsSync(mapPath) && { files: [new AttachmentBuilder(mapPath)] }),
     });
 
     await DeleteMessage({ message }).then(async () => {
