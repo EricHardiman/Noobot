@@ -1,8 +1,9 @@
 import {
   EmbedField,
-  MessageEmbed,
-  MessageActionRow,
-  MessageButton,
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
 } from 'discord.js';
 import { DeleteButton } from '../../Components';
 
@@ -14,31 +15,31 @@ const CreatePagination = ({
   currentPage = 1,
 }: PaginationProps): PaginationReturn => {
   const pageTotal = Math.ceil(options.length / 5);
-  const components = new MessageActionRow();
+  const components = new ActionRowBuilder<ButtonBuilder>();
   const disableNext = arrEnd >= options.length;
   const disablePrev = arrStart === 0;
 
   components.addComponents(
-    new MessageButton()
+    new ButtonBuilder()
       .setCustomId(`prev-${arrStart}-${arrEnd}-${currentPage}`)
-      .setStyle('SECONDARY')
+      .setStyle(ButtonStyle.Secondary)
       .setLabel('Previous')
       .setDisabled(disablePrev),
     DeleteButton,
-    new MessageButton()
+    new ButtonBuilder()
       .setCustomId(`next-${arrStart}-${arrEnd}-${currentPage}`)
-      .setStyle('PRIMARY')
+      .setStyle(ButtonStyle.Primary)
       .setLabel('Next')
       .setDisabled(disableNext),
   );
 
   const fields = [...options].slice(arrStart, arrEnd);
-  const embeds = new MessageEmbed({
+  const embeds = new EmbedBuilder({
     fields,
     footer: { text: `Page ${currentPage} of ${pageTotal}` },
   });
 
-  title && embeds.setAuthor(title);
+  title && embeds.setAuthor({ name: title });
 
   return { embeds, components, arrStart, arrEnd, currentPage };
 };
@@ -53,8 +54,8 @@ export interface PaginationProps {
 }
 
 interface PaginationReturn {
-  embeds: MessageEmbed;
-  components: MessageActionRow;
+  embeds: EmbedBuilder;
+  components: ActionRowBuilder<ButtonBuilder>;
   arrStart: number;
   arrEnd: number;
   currentPage: number;

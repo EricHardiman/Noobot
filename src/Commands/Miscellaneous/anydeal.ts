@@ -1,8 +1,9 @@
 import {
   EmbedField,
-  MessageActionRow,
-  MessageButton,
-  MessageEmbed,
+  ButtonBuilder,
+  ActionRowBuilder,
+  EmbedBuilder,
+  ButtonStyle,
 } from 'discord.js';
 import { GetGameTitle, DeleteMessage } from '../../Helpers';
 import { Command } from '../../Interfaces';
@@ -36,19 +37,18 @@ export const command: Command = {
       }),
     );
 
-    const buttonRow = new MessageActionRow();
+    const buttonRow = new ActionRowBuilder<ButtonBuilder>();
     for (const index in returnedGames) {
       buttonRow.addComponents(
-        new MessageButton()
+        new ButtonBuilder()
           .setCustomId(`anydeal-${index}`)
-          .setStyle('PRIMARY')
+          .setStyle(ButtonStyle.Primary)
           .setLabel(`Game ${parseInt(index) + 1}`),
       );
     }
-    const gameList = new MessageEmbed({
+    const gameList = new EmbedBuilder({
       fields,
-      color: 'DARK_ORANGE',
-    });
+    }).setColor('DarkOrange');
 
     return await message.channel
       .send({

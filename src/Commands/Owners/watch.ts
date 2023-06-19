@@ -2,7 +2,12 @@ import axios from 'axios';
 import { Command } from '../../Interfaces';
 import { OWNERS, IMDB_URL } from '../../config.json';
 import { DeleteMessage } from '../../Helpers';
-import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
+import {
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+} from 'discord.js';
 import { Watch as WatchCollector } from '../../Collectors';
 
 export const command: Command = {
@@ -18,8 +23,8 @@ export const command: Command = {
           .get(`${IMDB_URL}${imdbSearch}&id=${message.author.id}`)
           .then(({ data }) => data);
 
-      const embed = new MessageEmbed()
-        .setAuthor('Come Watch Together!')
+      const embed = new EmbedBuilder()
+        .setAuthor({ name: 'Come Watch Together!' })
         .setTitle(Title)
         .setURL(imdbSearch)
         .setThumbnail(`https:${Poster}`)
@@ -29,16 +34,16 @@ export const command: Command = {
           { name: 'Genre', value: Genre, inline: true },
           { name: 'Length', value: Runtime, inline: true },
         )
-        .setFooter('This will be Deleted in 5 Minutes');
+        .setFooter({ text: 'This will be Deleted in 5 Minutes' });
 
-      const buttonRow = new MessageActionRow().addComponents(
-        new MessageButton()
+      const buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
           .setCustomId(`invite`)
-          .setStyle('SUCCESS')
+          .setStyle(ButtonStyle.Success)
           .setLabel('Send Invite'),
-        new MessageButton()
+        new ButtonBuilder()
           .setCustomId(`delete-watch`)
-          .setStyle('DANGER')
+          .setStyle(ButtonStyle.Danger)
           .setLabel('Close'),
       );
 

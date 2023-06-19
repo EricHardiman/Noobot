@@ -17,8 +17,11 @@ export const event: Event = {
       .split(/ +/g);
 
     const cmd = args.shift()?.toLowerCase();
+
     if (!cmd) return;
+
     const command = client.commands.get(cmd) || client.aliases.get(cmd);
+
     if (command) (command as Command).run(client, message, args);
   },
 };

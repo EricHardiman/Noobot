@@ -1,4 +1,4 @@
-import { MessageEmbed, MessageEmbedOptions } from 'discord.js';
+import { EmbedBuilder, EmbedData } from 'discord.js';
 import { Command } from '../../Interfaces';
 import { HowLongToBeatService } from 'howlongtobeat';
 
@@ -18,7 +18,7 @@ export const command: Command = {
 
       const { name, imageUrl, timeLabels } = result;
 
-      const embedData: MessageEmbedOptions = {
+      const embedData: EmbedData = {
         title: name,
         color: 53380,
         thumbnail: {
@@ -26,11 +26,15 @@ export const command: Command = {
         },
       };
 
-      const embed = new MessageEmbed(embedData);
+      const embed = new EmbedBuilder(embedData);
 
       for (const [key, phrase] of timeLabels) {
         if (result[key] > 0) {
-          embed.addField(phrase, `${result[key]} hours`, true);
+          embed.addFields({
+            name: phrase,
+            value: `${result[key]} hours`,
+            inline: true,
+          });
         }
       }
       await message.channel.send({ embeds: [embed] });

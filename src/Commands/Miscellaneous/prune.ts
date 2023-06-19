@@ -1,10 +1,11 @@
+import { ChannelType } from 'discord.js';
 import { Command } from '../../Interfaces';
 
 export const command: Command = {
   name: 'prune',
   description: 'Mass deletes 1-100 Messages at a time."',
   run: async (_client, message, [amount]) => {
-    if (message.channel.type === 'DM') return;
+    if (message.channel.type === ChannelType.DM) return;
 
     let amountToPrune = 2;
     if (parseInt(amount) && parseInt(amount) < 100 && parseInt(amount) >= 1) {
@@ -18,7 +19,7 @@ export const command: Command = {
         limit: amountToPrune,
       })
       .then((messages) => {
-        if (message.channel.type === 'GUILD_TEXT')
+        if (message.channel.type === ChannelType.GuildText)
           message.channel.bulkDelete(messages, true);
       })
       .catch(() => {

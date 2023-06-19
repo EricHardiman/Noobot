@@ -1,5 +1,10 @@
 import { Command } from '../../Interfaces';
-import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  EmbedBuilder,
+} from 'discord.js';
 import SongSearchCollector from '../../Collectors/SongSearch';
 import { SongSearch, TrackSelectionEmbed } from '../../Helpers';
 
@@ -15,19 +20,18 @@ export const command: Command = {
 
     if (!tracks.length) return;
 
-    const embed = new MessageEmbed({
+    const embed = new EmbedBuilder({
       title: 'Please Select a Song:',
-      color: 'BLURPLE',
       fields: tracks.map(TrackSelectionEmbed),
-    });
+    }).setColor('Blurple');
 
-    const buttonRow = new MessageActionRow();
+    const buttonRow = new ActionRowBuilder<ButtonBuilder>();
 
     for (const index in tracks) {
       buttonRow.addComponents(
-        new MessageButton()
+        new ButtonBuilder()
           .setCustomId(`songSearch-${index}`)
-          .setStyle('PRIMARY')
+          .setStyle(ButtonStyle.Primary)
           .setLabel(`Song ${parseInt(index) + 1}`),
       );
     }

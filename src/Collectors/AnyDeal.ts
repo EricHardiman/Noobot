@@ -1,4 +1,4 @@
-import { ButtonInteraction, Message, MessageEmbed } from 'discord.js';
+import { Message, EmbedBuilder } from 'discord.js';
 import { AnyDealGame } from '../global';
 import { DeleteMessage, GetGamePrice } from '../Helpers';
 
@@ -7,11 +7,8 @@ const AnyDealCollector = ({
   originalMessage,
   games,
 }: AnyDealProps) => {
-  const filter = (i: ButtonInteraction) =>
-    i.user.id === originalMessage.author.id;
-
   const collector = sentMessage.channel.createMessageComponentCollector({
-    filter,
+    filter: (i) => i.user.id === originalMessage.author.id,
     time: 20000,
   });
 
@@ -20,7 +17,7 @@ const AnyDealCollector = ({
     const selectedGame: AnyDealGame = games[gameIndex];
     const gamePrices = await GetGamePrice(selectedGame.plain);
 
-    const gamePricesEmbed = new MessageEmbed({
+    const gamePricesEmbed = new EmbedBuilder({
       title: selectedGame.title,
       fields: gamePrices.map(({ price_new, url, shop: { name } }) => ({
         name: `Price: $${price_new}`,
@@ -29,7 +26,7 @@ const AnyDealCollector = ({
       })),
     });
 
-    return await i.update({
+    await i.update({
       components: [],
       embeds: [gamePricesEmbed],
     });

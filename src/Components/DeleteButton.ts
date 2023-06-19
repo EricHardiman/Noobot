@@ -1,8 +1,8 @@
-import { MessageActionRow, MessageButton } from 'discord.js';
+import { ButtonBuilder, ButtonStyle } from 'discord.js';
 
-const DeleteButton: MessageButton = new MessageButton()
+const DeleteButton = new ButtonBuilder()
   .setCustomId(`delete`)
-  .setStyle('DANGER')
+  .setStyle(ButtonStyle.Danger)
   .setLabel(`Close`);
 
 export default DeleteButton;

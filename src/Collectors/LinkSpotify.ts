@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Message, MessageEmbed } from 'discord.js';
+import { Message, EmbedBuilder } from 'discord.js';
 import SpotifyLink from '../Database/SpotifyLink';
 import { DeleteMessage } from '../Helpers';
 
@@ -41,16 +41,16 @@ const LinkSpotifyCollector = ({
                 external_urls: { spotify },
               } = data;
 
-              const embed = new MessageEmbed()
-                .setAuthor(
-                  'Successfully Linked!',
-                  images.length
+              const embed = new EmbedBuilder()
+                .setAuthor({
+                  name: 'Successfully Linked!',
+                  url: images.length
                     ? images[0].url
                     : 'https://storage.googleapis.com/pr-newsroom-wp/1/2021/02/Spotify_Icon_RGB_Green.png',
-                )
+                })
                 .setTitle(`${display_name} is now linked with Noobot!`)
                 .setURL(spotify)
-                .setColor('BLURPLE');
+                .setColor('Blurple');
 
               await DeleteMessage({ message: sentMessage });
               await originalMessage.author.send({ embeds: [embed] });

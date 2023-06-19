@@ -17,6 +17,6 @@ const SpotifyLinkSchema: Schema = new Schema({
 const SpotifyLink: Model<ISpotifyLink> = model(
   'SpotifyLink',
   SpotifyLinkSchema,
-);
+) as any;
 
 export default SpotifyLink;

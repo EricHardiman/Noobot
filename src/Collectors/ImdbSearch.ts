@@ -2,12 +2,12 @@ import { Message } from 'discord.js';
 import { Manager } from 'lavacord';
 import { VolcanoTrack } from '../global';
 import { DeleteMessage, Play } from '../Helpers';
+import { IFoundedTitleDetails } from 'movier';
 
-const SongSearchCollector = ({
+const ImdbSearchCollector = ({
   sentMessage,
   originalMessage,
-  songs,
-  manager,
+  movies,
 }: SongSearchProps) => {
   const collector = sentMessage.channel.createMessageComponentCollector({
     filter: (i) => i.user.id === originalMessage.author.id,
@@ -15,15 +15,10 @@ const SongSearchCollector = ({
   });
 
   collector.on('collect', async (i) => {
-    const [, songIndex] = i.customId.split('-');
-    const selectedSong = songs[songIndex];
+    const [, movieIndex] = i.customId.split('-');
+    const selectedMovie = movies[movieIndex] as IFoundedTitleDetails;
 
-    await Play({
-      message: originalMessage,
-      manager,
-      song: selectedSong,
-    });
-
+    originalMessage.channel.send(selectedMovie.url);
     return collector.stop('stop');
   });
 
@@ -42,8 +37,7 @@ const SongSearchCollector = ({
 interface SongSearchProps {
   sentMessage: Message;
   originalMessage: Message;
-  songs: VolcanoTrack[];
-  manager: Manager;
+  movies: IFoundedTitleDetails[];
 }
 
-export default SongSearchCollector;
+export default ImdbSearchCollector;

@@ -1,7 +1,7 @@
 import path from 'path';
 import { readdirSync } from 'fs';
-import { Client, Intents, Collection } from 'discord.js';
-import config, { TOKEN, VOLCANO_PASSWORD, MONGOOSE_URL } from '../config.json';
+import { Client, GatewayIntentBits, Collection } from 'discord.js';
+import config, { TOKEN, MONGOOSE_URL } from '../config.json';
 import { Command, Config, Event } from '../Interfaces';
 import { Manager } from 'lavacord';
 import mongoose, { Mongoose } from 'mongoose';
@@ -10,10 +10,12 @@ export default class DiscordClient extends Client {
   constructor() {
     super({
       intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_VOICE_STATES,
-        Intents.FLAGS.GUILD_PRESENCES,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.GuildPresences,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildScheduledEvents,
       ],
     });
   }
@@ -57,7 +59,12 @@ export default class DiscordClient extends Client {
 
   public async initVolcano(client: Client) {
     const nodes = [
-      { id: '1', host: 'localhost', port: 2333, password: VOLCANO_PASSWORD },
+      {
+        id: '1',
+        host: 'narco.buses.rocks',
+        port: 2269,
+        password: 'glasshost1984',
+      },
     ];
 
     this.manager = new Manager(nodes, {

@@ -1,19 +1,26 @@
-import { MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  EmbedBuilder,
+} from 'discord.js';
 import LinkSpotifyCollector from '../../Collectors/LinkSpotify';
 import SpotifyLink from '../../Database/SpotifyLink';
 import { DeleteMessage } from '../../Helpers';
 import { Command } from '../../Interfaces';
 
-const handleActionRow = (buttonsDisabled: boolean): MessageActionRow =>
-  new MessageActionRow().addComponents(
-    new MessageButton()
+const handleActionRow = (
+  buttonsDisabled: boolean,
+): ActionRowBuilder<ButtonBuilder> =>
+  new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder()
       .setLabel('Cancel')
-      .setStyle('DANGER')
+      .setStyle(ButtonStyle.Danger)
       .setCustomId('cancel')
       .setDisabled(buttonsDisabled),
-    new MessageButton()
+    new ButtonBuilder()
       .setLabel('Finished')
-      .setStyle('SUCCESS')
+      .setStyle(ButtonStyle.Success)
       .setCustomId('finished')
       .setDisabled(buttonsDisabled),
   );
@@ -51,8 +58,8 @@ export const command: Command = {
       return await SpotifyLink.create(newLink);
     });
 
-    const embed = new MessageEmbed()
-      .setAuthor('Link Spotify to Noobot')
+    const embed = new EmbedBuilder()
+      .setAuthor({ name: 'Link Spotify to Noobot' })
       .setTitle('Click Here')
       .setURL(
         `https://garbanzo.tacoreel.app/login?state=${secret}-${discordId}`,
@@ -60,7 +67,7 @@ export const command: Command = {
       .setDescription(
         'After you click the URL above, come back to this message and click Finished',
       )
-      .setFooter('This will be deleted after 30 seconds.');
+      .setFooter({ text: 'This will be deleted after 30 seconds.' });
 
     const disabledButtonsMessage = await message.author.send({
       embeds: [embed],

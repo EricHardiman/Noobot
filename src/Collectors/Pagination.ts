@@ -1,4 +1,4 @@
-import { ButtonInteraction, EmbedField, Message } from 'discord.js';
+import { EmbedField, Message } from 'discord.js';
 import { DeleteMessage, CreatePagination } from '../Helpers';
 
 const PaginationCollector = ({
@@ -7,11 +7,8 @@ const PaginationCollector = ({
   options,
   title,
 }: PaginationProps) => {
-  const filter = (i: ButtonInteraction) =>
-    i.user.id === originalMessage.author.id;
-
   const collector = sentMessage.channel.createMessageComponentCollector({
-    filter,
+    filter: (interaction) => interaction.user.id === originalMessage.author.id,
     time: 20000,
   });
 
@@ -50,7 +47,8 @@ const PaginationCollector = ({
     });
 
     collector.resetTimer();
-    return await i.update({ embeds: [embeds], components: [components] });
+
+    await i.update({ embeds: [embeds], components: [components] });
   });
 
   collector.on('end', async (_, reason) => {

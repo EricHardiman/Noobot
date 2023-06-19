@@ -20,7 +20,7 @@ export const command: Command = {
     }
 
     const volume = parseInt(args.join(''));
-    if (volume === NaN || volume <= 0 || volume >= 100) return;
+    if (Number.isNaN(volume) || volume <= 0 || volume >= 100) return;
     if (isPlaying) {
       player.volume(volume);
       return await message.channel

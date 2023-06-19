@@ -13,7 +13,6 @@
     // Import non-ES modules as default imports.
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "suppressImplicitAnyIndexErrors": true,
     "types": ["node"],
     "noImplicitAny": false
   },

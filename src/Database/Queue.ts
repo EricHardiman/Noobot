@@ -13,6 +13,6 @@ const QueueSchema: Schema = new Schema({
   tracks: { type: Array, required: false },
 });
 
-const Queue: Model<IQueue> = model('Queue', QueueSchema);
+const Queue: Model<IQueue> = model('Queue', QueueSchema) as any;
 
 export default Queue;

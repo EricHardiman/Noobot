@@ -1,8 +1,9 @@
 import {
   Message,
-  MessageEmbed,
-  MessageActionRow,
-  MessageButton,
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
 } from 'discord.js';
 import { DeleteMessage } from '../Helpers';
 import { WATCH_SECRET } from '../config.json';
@@ -29,20 +30,20 @@ const WatchCollector = ({
       const token = jwt.sign({ id, username }, WATCH_SECRET);
       const url = `https://watch.tacoreel.app/${roomId}?token=${token}`;
 
-      const buttonRow = new MessageActionRow().addComponents(
-        new MessageButton()
-          .setStyle('LINK')
+      const buttonRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+          .setStyle(ButtonStyle.Link)
           .setLabel(`Watch ${Title}`)
           .setURL(url),
       );
 
-      const embed = new MessageEmbed()
-        .setAuthor('Come Watch Together!')
+      const embed = new EmbedBuilder()
+        .setAuthor({ name: 'Come Watch Together!' })
         .setTitle(Title)
         .setThumbnail(`https:${Poster}`)
         .setURL(url)
         .setDescription(Plot)
-        .setFooter('Click Link to or Button Join!');
+        .setFooter({ text: 'Click Link to or Button Join!' });
 
       return await i.user
         .send({ embeds: [embed], components: [buttonRow] })

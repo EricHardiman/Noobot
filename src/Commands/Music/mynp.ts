@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js';
+import { EmbedBuilder } from 'discord.js';
 import { DeleteMessage, SongFromPresence } from '../../Helpers';
 import { Command } from '../../Interfaces';
 
@@ -21,8 +21,8 @@ export const command: Command = {
         song,
       } = songAndUser;
 
-      const embed = new MessageEmbed()
-        .setAuthor(`${displayName}'s Spotify is Currently Playing`)
+      const embed = new EmbedBuilder()
+        .setAuthor({ name: `${displayName}'s Spotify is Currently Playing` })
         .setColor(displayColor)
         .setTitle(song.info.title)
         .setURL(song.info.uri)
