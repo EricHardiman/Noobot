@@ -49,10 +49,10 @@ export const command: Command = {
 
     const { remainingTime, nextHelltide } = await page.evaluate(() => {
       const remainingTime = (
-        document.querySelector('div.text-2xl') as HTMLElement
+        document.querySelectorAll('div.text-2xl')[1] as HTMLElement
       ).innerText;
       const nextHelltide = (
-        document.querySelector('div.text-4xl') as HTMLElement
+        document.querySelectorAll('div.text-4xl')[1] as HTMLElement
       ).innerText;
 
       return { remainingTime, nextHelltide };
