@@ -48,14 +48,16 @@ export const command: Command = {
     ]);
 
     const { remainingTime, nextHelltide } = await page.evaluate(() => {
-      const remainingTime = (
-        document.querySelectorAll('div.text-2xl')[1] as HTMLElement
-      ).innerText;
-      const nextHelltide = (
-        document.querySelectorAll('div.text-4xl')[1] as HTMLElement
-      ).innerText;
+      const [_worldBoss, helltide, _legion] =
+        document.querySelectorAll('div.text-2xl');
 
-      return { remainingTime, nextHelltide };
+      const [_worldBossTimer, helltideTimer] =
+        document.querySelectorAll('div.text-xl');
+
+      return {
+        remainingTime: (helltideTimer as HTMLElement).innerText,
+        nextHelltide: (helltide as HTMLElement).innerText,
+      };
     });
 
     if (!remainingTime || !nextHelltide) {
