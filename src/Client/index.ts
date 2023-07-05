@@ -1,7 +1,13 @@
 import path from 'path';
 import { readdirSync } from 'fs';
 import { Client, GatewayIntentBits, Collection } from 'discord.js';
-import config, { TOKEN, MONGOOSE_URL } from '../config.json';
+import config, {
+  TOKEN,
+  MONGOOSE_URL,
+  LAVALINK_SERVER,
+  LAVALINK_PASS,
+  LAVALINK_PORT,
+} from '../config.json';
 import { Command, Config, Event } from '../Interfaces';
 import { Manager } from 'lavacord';
 import mongoose, { Mongoose } from 'mongoose';
@@ -61,9 +67,9 @@ export default class DiscordClient extends Client {
     const nodes = [
       {
         id: '1',
-        host: 'narco.buses.rocks',
-        port: 2269,
-        password: 'glasshost1984',
+        host: LAVALINK_SERVER,
+        port: LAVALINK_PORT,
+        password: LAVALINK_PASS,
       },
     ];
 
